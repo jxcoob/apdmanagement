@@ -2778,7 +2778,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('Apex Police Department Awards')
-        .setDescription(`**Award:** ${awardType}\n\n**Awarded to:** ${targetUser}\n\n────────────────────────────────────────────────\n\nCongratulations on your award you earned! We are proud and pleased with your work and dedication to the department. We hope to see much more in the future!🎖️`)
+        .setDescription(`**Award:** ${awardType}\n\n**Awarded to:** ${targetUser}\n\n<:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656>\n\nCongratulations on your award you earned! We are proud and pleased with your work and dedication to the department. We hope to see much more in the future!🎖️`)
         .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setThumbnail('https://media.discordapp.net/attachments/1435105704422936687/1435105729345228873/medal_png_2.png?ex=690ac1dc&is=6909705c&hm=c231e41a3f02c95bb2cda254bbd106479f87f26f22794f7d59a9e8721e2d9952&=&format=webp&quality=lossless')
@@ -3150,6 +3150,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
