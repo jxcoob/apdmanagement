@@ -806,7 +806,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Operators Attending:')
         .setDescription(attendeesList)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setFooter({text: 'APD Management'})
         .setTimestamp();
       
@@ -944,7 +944,7 @@ client.on('interactionCreate', async interaction=>{
         }
       } else {
         const updatedEmbed = new EmbedBuilder(embed.data)
-          .setColor('#95A5A6');
+          .setColor('#0C588A');
 
 
 
@@ -1104,7 +1104,7 @@ client.on('interactionCreate', async interaction=>{
 
         const dmEmbed = new EmbedBuilder()
           .setTitle('Infraction Issued')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'Infraction ID',value:infractionId,inline:true},
@@ -1132,7 +1132,7 @@ client.on('interactionCreate', async interaction=>{
 
         const logEmbed = new EmbedBuilder()
           .setTitle('Infraction Log')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'Infraction ID',value:infractionId,inline:true},
@@ -1200,7 +1200,7 @@ client.on('interactionCreate', async interaction=>{
 
         const revokeEmbed = new EmbedBuilder()
           .setTitle('Infraction Revoked')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'Infraction ID',value:infraction.id},
@@ -1262,7 +1262,7 @@ client.on('interactionCreate', async interaction=>{
 
         const embed = new EmbedBuilder()
           .setTitle(`Active Infractions for ${targetUser.tag}`)
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .setFooter({text:'APD Management'})
           .setTimestamp();
@@ -1312,7 +1312,7 @@ client.on('interactionCreate', async interaction=>{
 
         const wipeEmbed = new EmbedBuilder()
           .setTitle('Infractions Wiped')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'User',value:`${targetUser}`,inline:true},
@@ -1333,7 +1333,7 @@ client.on('interactionCreate', async interaction=>{
           await targetUser.send({
             embeds:[new EmbedBuilder()
               .setTitle('Your Infractions Have Been Wiped')
-              .setColor('#95A5A6')
+              .setColor('#0C588A')
               .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
               .setDescription(`All of your infractions (${infractionCount}) have been removed from the system.`)
               .setFooter({text:'APD Management'})
@@ -1429,7 +1429,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('User Promoted to Probie')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1410429525329973379/1420971878981570622/CADET_TRAINING.png?ex=68efba70&is=68ee68f0&hm=91677fa47a337403cc4804fa00e289e23a6f9288aeed39037d10c3bcc0e6a2e0&=&format=webp&quality=lossless')
         .addFields(
           {name:'User',value:`${targetUser}`,inline:true},
@@ -1524,7 +1524,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('User Retired')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           {name:'User',value:`${targetUser}`,inline:true},
           {name:'Retired By',value:`<@${interaction.user.id}>`,inline:true},
@@ -1627,7 +1627,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('User Reinstated')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           {name:'User',value:`${targetUser}`,inline:true},
           {name:'Reinstated By',value:`<@${interaction.user.id}>`,inline:true},
@@ -1724,7 +1724,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('Special Permission Granted')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           {name:'Permission ID',value:permissionId,inline:true},
           {name:'User',value:`${targetUser}`,inline:true},
@@ -1828,7 +1828,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('Special Permission Revoked')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           {name:'Permission ID',value:permissionId,inline:true},
           {name:'User',value:`${user}`,inline:true},
@@ -1952,7 +1952,7 @@ client.on('interactionCreate', async interaction=>{
 
         const dmEmbed = new EmbedBuilder()
           .setTitle('Officer Review')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .addFields(
             {name:'Review ID',value:reviewId,inline:true},
             {name:'Rating',value:rating,inline:true},
@@ -1980,7 +1980,7 @@ client.on('interactionCreate', async interaction=>{
 
         const logEmbed = new EmbedBuilder()
           .setTitle('Officer Review')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .addFields(
             {name:'Review ID',value:reviewId,inline:true},
             {name:'User',value:`${targetUser}`,inline:true},
@@ -2067,7 +2067,7 @@ client.on('interactionCreate', async interaction=>{
 
         const embed = new EmbedBuilder()
           .setTitle(`Review ${reviewId}`)
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .addFields(
             {name:'User',value:`${user}`,inline:true},
             {name:'Rating',value:review.rating,inline:true},
@@ -2156,7 +2156,7 @@ client.on('interactionCreate', async interaction=>{
 
         const clearEmbed = new EmbedBuilder()
           .setTitle('Review Cleared')
-          .setColor('#95A5A6')
+          .setColor('#0C588A')
           .addFields(
             {name:'Review ID',value:reviewId,inline:true},
             {name:'User',value:`${user}`,inline:true},
@@ -2208,7 +2208,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Fairbourne Police Department Mass Shift')
         .setDescription(`<@&1376058141128790076>\n\nA mass shift has now commenced, all officers are encouraged to attend and assist with patrol duties. Please ensure you are in proper uniform and have all necessary equipment. Your dedication to serving the community is greatly appreciated!`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           { name: 'Watch Commander', value: `${watchCommander}`, inline: false },
           ...(assistantWC ? [{ name: 'Assistant Watch Commander', value: `${assistantWC}`, inline: false }] : []),
@@ -2258,7 +2258,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Fairbourne Police Department - End')
         .setDescription('The mass shift has now concluded. Thank you to all deputies who attending this mass shift, your hard work will not go unnoticed!')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Concluded by ${interaction.user.tag}`})
         .setTimestamp();
@@ -2329,7 +2329,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Arrest Log')
         .setDescription(`**ID:** ${arrestId}\n**Suspect:** ${username}\n**Charges:** ${charges}`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setThumbnail('https://images-ext-1.discordapp.net/external/xt1CuOBOZ4m5QYMHzGi-ERzaeC5dIJveECS88WPKGkQ/%3Fsize%3D512/https/cdn.discordapp.com/icons/1412324928333807689/a8773509f9faa0ad052e60af2a92faea.png?format=webp&quality=lossless')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Executed by ${interaction.user.tag}`})
@@ -2390,7 +2390,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Citation Log')
         .setDescription(`**ID:** ${citationId}\n**Suspect:** ${username}\n**Reason(s):** ${reason}\n**Fine:** ${fine}`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setThumbnail('https://images-ext-1.discordapp.net/external/xt1CuOBOZ4m5QYMHzGi-ERzaeC5dIJveECS88WPKGkQ/%3Fsize%3D512/https/cdn.discordapp.com/icons/1412324928333807689/a8773509f9faa0ad052e60af2a92faea.png?format=webp&quality=lossless')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Executed by ${interaction.user.tag}`})
@@ -2540,7 +2540,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Incident Report')
         .setDescription(`**ID:** ${reportId}`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           {name:'Scene Location',value:sceneLocation,inline:false},
           {name:'Callsign / Roleplay Name',value:callsign,inline:false},
@@ -2606,7 +2606,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('New Warrant')
         .setDescription(`**ID:** ${warrantId}\n**Suspect:** ${username}\n**Charges:** ${charges}`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setThumbnail('https://images-ext-1.discordapp.net/external/xt1CuOBOZ4m5QYMHzGi-ERzaeC5dIJveECS88WPKGkQ/%3Fsize%3D512/https/cdn.discordapp.com/icons/1412324928333807689/a8773509f9faa0ad052e60af2a92faea.png?format=webp&quality=lossless')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Executed by ${interaction.user.tag}`})
@@ -2724,7 +2724,7 @@ client.on('interactionCreate', async interaction=>{
 
       const embed = new EmbedBuilder()
         .setTitle('Your Statistics')
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .addFields(
           {name:'Citations Issued',value:`${userCitations.length}`,inline:true},
           {name:'Arrests Issued',value:`${userArrests.length}`,inline:true},
@@ -2779,7 +2779,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('Fairbourne Police Department Award')
         .setDescription(`Please congratulate ${targetUser} for earning the ${awardType}!\n\nCongratulations ${targetUser} for achieving this milestone within your career in APD. Thank you for your hard work and dedication to the department.`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Feel free to congratulate them in「💬」public-chat`})
         .setTimestamp();
@@ -2839,7 +2839,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('SWAT Deployment - Vote')
         .setDescription(`> A SWAT Deployment vote has been initiated by ${interaction.user} Please mark yourself attending to join the upcoming deployment. In order for this deployment to start, it'll require at least 2+ operators attending.\n\n **If you mark yourself as attending, you are required to join the deployment.**`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setTimestamp();
 
@@ -3010,7 +3010,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('SWAT Deployment - Start')
         .setDescription(`> A SWAT Deployment has now commenced by ${interaction.user} If you have marked yourself attending to the deployment vote, you are required to attend this deployment.\n\n > Please ensure you are in proper uniform and have all necessary equipment, then head your way down to the briefing room for assignments and deployment details.`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setTimestamp();
 
@@ -3088,7 +3088,7 @@ client.on('interactionCreate', async interaction=>{
       const embed = new EmbedBuilder()
         .setTitle('SWAT Deployment - Ended')
         .setDescription(`> The recent SWAT Deployment has now concluded by ${interaction.user}.\n\n > Thank you to all operators who have attended the deployment. If you missed this one, don't worry! You'll be able to attend the other deployments usually hosted every other day unless said otherwise by SWAT Command.`)
-        .setColor('#95A5A6')
+        .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Concluded by ${interaction.user.tag}`})
         .setTimestamp();
@@ -3161,6 +3161,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
