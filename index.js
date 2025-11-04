@@ -2791,7 +2791,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const awardChannelId = '1433560249402523810';
+      const awardChannelId = '1414070693561237575';
       const awardChannel = await interaction.client.channels.fetch(awardChannelId);
       
       if(!awardChannel) {
@@ -2850,7 +2850,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const deploymentChannelId = '1418055104044732527';
+      const deploymentChannelId = '1416608369447534662';
       const deploymentChannel = await interaction.client.channels.fetch(deploymentChannelId);
       
       if(!deploymentChannel) {
@@ -3021,7 +3021,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const deploymentChannelId = '1418055104044732527';
+      const deploymentChannelId = '1416608369447534662';
       const deploymentChannel = await interaction.client.channels.fetch(deploymentChannelId);
       
       if(!deploymentChannel) {
@@ -3100,7 +3100,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const deploymentChannelId = '1418055104044732527';
+      const deploymentChannelId = '1416608369447534662';
       const deploymentChannel = await interaction.client.channels.fetch(deploymentChannelId);
       
       if(!deploymentChannel) {
@@ -3161,5 +3161,6 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
