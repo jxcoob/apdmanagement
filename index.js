@@ -593,10 +593,10 @@ const commands = [
     .addStringOption(opt => opt.setName('type').setDescription('Type of award').setRequired(true)
       .addChoices(
         {name: 'Medal of Valor', value: 'Medal of Valor'},
-        {name: "Medal of Honor", value: "Chiefs's Recognition Award"},
-        {name: 'Purple Heart Medal', value: 'Legacy Award'},
-        {name: "Distinguished Service", value: "Chief's Officer of the Month"},
-        {name: 'Chief's Recognition', value: 'Chief's Recognition'},
+        {name: 'Medal of Honor', value: 'Medal of Honor'},
+        {name: 'Purple Heart Medal', value: 'Purple Heart Medal'},
+        {name: 'Distinguished Service', value: 'Distinguished Service'},
+        {name: 'Chiefs Recognition', value: 'Chiefs Recognition'},
       )
     )
     .toJSON(),
@@ -3161,4 +3161,5 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
