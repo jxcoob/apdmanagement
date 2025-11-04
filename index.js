@@ -755,13 +755,7 @@ client.on('messageCreate', async message=>{
 
 
 // ====== INTERACTION HANDLER ======
-// INTERACTION HANDLER - Button Handlers Section
-// Replace lines ~650-850 with this clean version:
-
-// Replace lines 650-1106 with this corrected code:
-
 client.on('interactionCreate', async interaction=>{
-    // Deployment attendance button
     if(interaction.customId && interaction.customId.startsWith('deployment_attend_')) {
       const messageId = interaction.customId.split('_')[2];
       
@@ -795,7 +789,6 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    // Deployment view button
     if(interaction.customId && interaction.customId.startsWith('deployment_view_')) {
       const messageId = interaction.customId.split('_')[2];
       
@@ -824,7 +817,6 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    // Deployment remove button
     if(interaction.customId && interaction.customId.startsWith('deployment_remove_')) {
       const messageId = interaction.customId.split('_')[2];
       
@@ -841,98 +833,15 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    // Warrant buttons handler
     if(interaction.customId && (interaction.customId.startsWith('warrant_completed_') || interaction.customId.startsWith('warrant_remove_'))) {
       const isCompleted = interaction.customId.startsWith('warrant_completed_');
       const warrantId = interaction.customId.split('_')[2];
-      const actionUser = interaction.user.tag;
+      const completedUser = interaction.user.tag;
+      const removedUser = interaction.user.tag;
 
-      const embed = interaction.message.embeds[0];
 
-      const warrantChannelId = '1426020925933092996';
-      const warrantAnnounceChannelId = '1416608622019870792';
 
-      const currentChannelId = interaction.channel.id;
-      const otherChannelId = currentChannelId === warrantChannelId ? warrantAnnounceChannelId : warrantChannelId;
 
-      if(isCompleted) {
-        // Create completed embed (green)
-        const updatedEmbed = new EmbedBuilder(embed.data)
-          .setColor('#2ECC71');
-
-        const completedButton = new ButtonBuilder()
-          .setCustomId(`warrant_completed_${warrantId}`)
-          .setLabel(`Completed by ${actionUser}`)
-          .setStyle(ButtonStyle.Success)
-          .setDisabled(true);
-
-        const buttonRow = new ActionRowBuilder()
-          .addComponents(completedButton);
-
-        // Update current channel
-        await interaction.update({embeds: [updatedEmbed], components: [buttonRow]});
-
-        // Update other channel
-        try {
-          const otherChannel = await interaction.client.channels.fetch(otherChannelId);
-          if(otherChannel) {
-            const messages = await otherChannel.messages.fetch({ limit: 100 });
-            const targetMessage = messages.find(msg => 
-              msg.embeds.length > 0 && 
-              msg.embeds[0].data.description && 
-              msg.embeds[0].data.description.includes(warrantId)
-            );
-
-            if(targetMessage) {
-              await targetMessage.edit({embeds: [updatedEmbed], components: [buttonRow]});
-            }
-          }
-        } catch(err) {
-          console.error('Error updating other channel:', err);
-        }
-      } else {
-        // Create removed embed (red)
-        const updatedEmbed = new EmbedBuilder(embed.data)
-          .setColor('#E74C3C');
-
-        const removeButton = new ButtonBuilder()
-          .setCustomId(`warrant_remove_${warrantId}`)
-          .setLabel(`Removed by ${actionUser}`)
-          .setStyle(ButtonStyle.Danger)
-          .setDisabled(true);
-
-        const buttonRow = new ActionRowBuilder()
-          .addComponents(removeButton);
-
-        // Update current channel
-        await interaction.update({embeds: [updatedEmbed], components: [buttonRow]});
-
-        // Update other channel
-        try {
-          const otherChannel = await interaction.client.channels.fetch(otherChannelId);
-          if(otherChannel) {
-            const messages = await otherChannel.messages.fetch({ limit: 100 });
-            const targetMessage = messages.find(msg => 
-              msg.embeds.length > 0 && 
-              msg.embeds[0].data.description && 
-              msg.embeds[0].data.description.includes(warrantId)
-            );
-
-            if(targetMessage) {
-              await targetMessage.edit({embeds: [updatedEmbed], components: [buttonRow]});
-            }
-          }
-        } catch(err) {
-          console.error('Error updating other channel:', err);
-        }
-      }
-      return;
-    }
-
-  // Check if it's a command or modal
-  if(!interaction.isChatInputCommand() && !interaction.isModalSubmit()) return;
-
-  const cmd = interaction.commandName;
 
 
 
@@ -2494,7 +2403,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const citationChannelId = '1403083130742505618';
+      const citationChannelId = '1435084820081414235';
       const citationChannel = await interaction.client.channels.fetch(citationChannelId);
       
       if(citationChannel) {
@@ -3240,9 +3149,6 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
-
-
-
 
 
 
