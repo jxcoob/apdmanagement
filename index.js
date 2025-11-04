@@ -303,19 +303,6 @@ function generateReportID() {
   return `#R${String(reportCounter).padStart(5, '0')}`;
 }
 
-function loadRetiredUsers() {
-  if(fs.existsSync(retiredUsersPath)) {
-    const data = JSON.parse(fs.readFileSync(retiredUsersPath));
-    return new Map(Object.entries(data));
-  }
-  return new Map();
-}
-
-function saveRetiredUsers(retiredUsersMap) {
-  const obj = Object.fromEntries(retiredUsersMap);
-  fs.writeFileSync(retiredUsersPath, JSON.stringify(obj, null, 2));
-}
-
 
 
 
@@ -599,45 +586,6 @@ const commands = [
 
 
   new SlashCommandBuilder()
-    .setName('training-vote')
-    .setDescription('Initiate a cadet training vote')
-    .setDefaultMemberPermissions(null)
-    .toJSON(),
-
-
-
-
-
-
-
-
-  new SlashCommandBuilder()
-    .setName('training-start')
-    .setDescription('Start the cadet training')
-    .setDefaultMemberPermissions(null)
-    .toJSON(),
-
-
-
-
-
-
-
-
-  new SlashCommandBuilder()
-    .setName('training-end')
-    .setDescription('End the cadet training')
-    .setDefaultMemberPermissions(null)
-    .toJSON(),
-
-
-
-
-
-
-
-
-  new SlashCommandBuilder()
     .setName('award')
     .setDescription('Award a user with a departmental award')
     .setDefaultMemberPermissions(null)
@@ -648,7 +596,7 @@ const commands = [
         {name: "Medal of Honor", value: "Chiefs's Recognition Award"},
         {name: 'Purple Heart Medal', value: 'Legacy Award'},
         {name: "Distinguished Service", value: "Chief's Officer of the Month"},
-        {name: 'Chief’s Recognition', value: 'Distinguished Service Medal'},
+        {name: 'Chief's Recognition', value: 'Distinguished Service Medal'},
       )
     )
     .toJSON(),
@@ -808,7 +756,7 @@ client.on('messageCreate', async message=>{
 
 // ====== INTERACTION HANDLER ======
 client.on('interactionCreate', async interaction=>{
-    if(interaction.customId.startsWith('deployment_attend_')) {
+    if(interaction.customId && interaction.customId.startsWith('deployment_attend_')) {
       const messageId = interaction.customId.split('_')[2];
       
       if(!deploymentAttendees.has(messageId)) {
@@ -841,7 +789,7 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    if(interaction.customId.startsWith('deployment_view_')) {
+    if(interaction.customId && interaction.customId.startsWith('deployment_view_')) {
       const messageId = interaction.customId.split('_')[2];
       
       if(!deploymentAttendees.has(messageId) || deploymentAttendees.get(messageId).size === 0) {
@@ -869,7 +817,7 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    if(interaction.customId.startsWith('deployment_remove_')) {
+    if(interaction.customId && interaction.customId.startsWith('deployment_remove_')) {
       const messageId = interaction.customId.split('_')[2];
       
       if(deploymentAttendees.has(messageId)) {
@@ -885,7 +833,7 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    if(interaction.customId.startsWith('warrant_completed_') || interaction.customId.startsWith('warrant_remove_')) {
+    if(interaction.customId && (interaction.customId.startsWith('warrant_completed_') || interaction.customId.startsWith('warrant_remove_'))) {
       const isCompleted = interaction.customId.startsWith('warrant_completed_');
       const warrantId = interaction.customId.split('_')[2];
       const completedUser = interaction.user.tag;
@@ -1064,7 +1012,6 @@ client.on('interactionCreate', async interaction=>{
       }
       return;
     }
-  }
 
 
 
@@ -2246,45 +2193,45 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-else if(cmd==='massshift-start'){
-  const massshiftAllowedRoles = ['1376057126446698506','1376056345291128872'];
-  if(!interaction.member.roles.cache.some(r => massshiftAllowedRoles.includes(r.id))){
-    return interaction.reply({content:'You do not have permission to start a mass shift.', flags: MessageFlags.Ephemeral});
-  }
+    else if(cmd==='massshift-start'){
+      const massshiftAllowedRoles = ['1376057126446698506','1376056345291128872'];
+      if(!interaction.member.roles.cache.some(r => massshiftAllowedRoles.includes(r.id))){
+        return interaction.reply({content:'You do not have permission to start a mass shift.', flags: MessageFlags.Ephemeral});
+      }
 
 
-  const watchCommander = interaction.options.getUser('watch-commander');
-  const assistantWC = interaction.options.getUser('assistant-watch-commander');
-  const supervisorsInput = interaction.options.getString('supervisors');
+      const watchCommander = interaction.options.getUser('watch-commander');
+      const assistantWC = interaction.options.getUser('assistant-watch-commander');
+      const supervisorsInput = interaction.options.getString('supervisors');
 
 
-  const embed = new EmbedBuilder()
-    .setTitle('Fairbourne Police Department Mass Shift')
-    .setDescription(`<@&1376058141128790076>\n\nA mass shift has now commenced, all officers are encouraged to attend and assist with patrol duties. Please ensure you are in proper uniform and have all necessary equipment. Your dedication to serving the community is greatly appreciated!`)
-    .setColor('#95A5A6')
-    .addFields(
-      { name: 'Watch Commander', value: `${watchCommander}`, inline: false },
-      ...(assistantWC ? [{ name: 'Assistant Watch Commander', value: `${assistantWC}`, inline: false }] : []),
-      { name: 'Supervisor(s)', value: supervisorsInput, inline: false }
-    )
-    .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
-    .setTimestamp();
+      const embed = new EmbedBuilder()
+        .setTitle('Fairbourne Police Department Mass Shift')
+        .setDescription(`<@&1376058141128790076>\n\nA mass shift has now commenced, all officers are encouraged to attend and assist with patrol duties. Please ensure you are in proper uniform and have all necessary equipment. Your dedication to serving the community is greatly appreciated!`)
+        .setColor('#95A5A6')
+        .addFields(
+          { name: 'Watch Commander', value: `${watchCommander}`, inline: false },
+          ...(assistantWC ? [{ name: 'Assistant Watch Commander', value: `${assistantWC}`, inline: false }] : []),
+          { name: 'Supervisor(s)', value: supervisorsInput, inline: false }
+        )
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
+        .setTimestamp();
 
 
-  const massShiftChannelId = '1414069284019241084';
-  const massShiftChannel = await interaction.client.channels.fetch(massShiftChannelId);
-  if(!massShiftChannel) return interaction.reply({content:'Mass shift channel not found.', flags: MessageFlags.Ephemeral});
+      const massShiftChannelId = '1414069284019241084';
+      const massShiftChannel = await interaction.client.channels.fetch(massShiftChannelId);
+      if(!massShiftChannel) return interaction.reply({content:'Mass shift channel not found.', flags: MessageFlags.Ephemeral});
 
 
-  await massShiftChannel.send({
-    content: '<@&1376058141128790076>',
-    embeds: [embed],
-    allowedMentions: { roles: ['1376058141128790076'] }
-  });
+      await massShiftChannel.send({
+        content: '<@&1376058141128790076>',
+        embeds: [embed],
+        allowedMentions: { roles: ['1376058141128790076'] }
+      });
 
 
-  await interaction.reply({content:`Mass shift successfully started with Watch Commander ${watchCommander.tag}.`, flags: MessageFlags.Ephemeral});
-}
+      await interaction.reply({content:`Mass shift successfully started with Watch Commander ${watchCommander.tag}.`, flags: MessageFlags.Ephemeral});
+    }
 
 
 
@@ -3214,6 +3161,3 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
-
-
-
