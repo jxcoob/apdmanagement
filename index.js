@@ -2782,7 +2782,7 @@ client.on('interactionCreate', async interaction=>{
         .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setThumbnail('https://media.discordapp.net/attachments/1435105704422936687/1435105729345228873/medal_png_2.png?ex=690ac1dc&is=6909705c&hm=c231e41a3f02c95bb2cda254bbd106479f87f26f22794f7d59a9e8721e2d9952&=&format=webp&quality=lossless')
-        .setFooter({text:`Feel free to congratulate them in「💬」public-chat`})
+        .setFooter({text:`Issued by: ${interaction.user.tag}`})
         .setTimestamp();
 
 
@@ -3150,6 +3150,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
