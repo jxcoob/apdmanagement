@@ -2206,7 +2206,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       const embed = new EmbedBuilder()
-        .setTitle('Fairbourne Police Department Mass Shift')
+        .setTitle('Apex Police Department Mass Shift')
         .setDescription(`<@&1376058141128790076>\n\nA mass shift has now commenced, all officers are encouraged to attend and assist with patrol duties. Please ensure you are in proper uniform and have all necessary equipment. Your dedication to serving the community is greatly appreciated!`)
         .setColor('#0C588A')
         .addFields(
@@ -2256,7 +2256,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       const embed = new EmbedBuilder()
-        .setTitle('Fairbourne Police Department - End')
+        .setTitle('Apex Police Department - End')
         .setDescription('The mass shift has now concluded. Thank you to all deputies who attending this mass shift, your hard work will not go unnoticed!')
         .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
@@ -3150,6 +3150,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
