@@ -2260,7 +2260,7 @@ else if(cmd==='massshift-start'){
 
   const embed = new EmbedBuilder()
     .setTitle('Fairbourne Police Department Mass Shift')
-    .setDescription(`<@&1429558625478770798>\n\nA mass shift has now commenced, all officers are encouraged to attend and assist with patrol duties. Please ensure you are in proper uniform and have all necessary equipment. Your dedication to serving the community is greatly appreciated!`)
+    .setDescription(`<@&1376058141128790076>\n\nA mass shift has now commenced, all officers are encouraged to attend and assist with patrol duties. Please ensure you are in proper uniform and have all necessary equipment. Your dedication to serving the community is greatly appreciated!`)
     .setColor('#95A5A6')
     .addFields(
       { name: 'Watch Commander', value: `${watchCommander}`, inline: false },
@@ -2277,9 +2277,9 @@ else if(cmd==='massshift-start'){
 
 
   await massShiftChannel.send({
-    content: '<@&1429558625478770798>',
+    content: '<@&1376058141128790076>',
     embeds: [embed],
-    allowedMentions: { roles: ['1429558625478770798'] }
+    allowedMentions: { roles: ['1376058141128790076'] }
   });
 
 
@@ -2952,10 +2952,10 @@ else if(cmd==='massshift-start'){
 
 
       const message = await deploymentChannel.send({
-        content: '<@&1412324928836862001>',
+        content: '<@&1376359560658288640>',
         embeds: [embed],
         components: [buttonRow],
-        allowedMentions: { roles: ['1412324928836862001'] }
+        allowedMentions: { roles: ['1376359560658288640'] }
       });
 
 
@@ -3088,7 +3088,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const mentionContent = attendeesList ? `<@&1412324928836862001> ${attendeesList}` : '<@&1412324928836862001>';
+      const mentionContent = attendeesList ? `<@&1376359560658288640> ${attendeesList}` : '<@&1376359560658288640>';
 
 
 
@@ -3100,7 +3100,7 @@ else if(cmd==='massshift-start'){
       await deploymentChannel.send({
         content: mentionContent,
         embeds: [embed],
-        allowedMentions: { roles: ['1412324928836862001'], users: latestMessageId ? Array.from(deploymentAttendees.get(latestMessageId)) : [] }
+        allowedMentions: { roles: ['1376359560658288640'], users: latestMessageId ? Array.from(deploymentAttendees.get(latestMessageId)) : [] }
       });
 
 
@@ -3214,5 +3214,6 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
