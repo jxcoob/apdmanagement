@@ -3,6 +3,7 @@ const { Client, GatewayIntentBits, EmbedBuilder, PermissionFlagsBits, SlashComma
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
+const keep_alive = require('./keep_alive.js')
 
 
 
@@ -3611,3 +3612,4 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
