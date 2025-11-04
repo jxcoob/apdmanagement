@@ -758,6 +758,8 @@ client.on('messageCreate', async message=>{
 // INTERACTION HANDLER - Button Handlers Section
 // Replace lines ~650-850 with this clean version:
 
+// Replace lines 650-1106 with this corrected code:
+
 client.on('interactionCreate', async interaction=>{
     // Deployment attendance button
     if(interaction.customId && interaction.customId.startsWith('deployment_attend_')) {
@@ -839,7 +841,7 @@ client.on('interactionCreate', async interaction=>{
       return;
     }
     
-    // Warrant buttons handler - FIXED VERSION
+    // Warrant buttons handler
     if(interaction.customId && (interaction.customId.startsWith('warrant_completed_') || interaction.customId.startsWith('warrant_remove_'))) {
       const isCompleted = interaction.customId.startsWith('warrant_completed_');
       const warrantId = interaction.customId.split('_')[2];
@@ -931,9 +933,6 @@ client.on('interactionCreate', async interaction=>{
   if(!interaction.isChatInputCommand() && !interaction.isModalSubmit()) return;
 
   const cmd = interaction.commandName;
-
-
-
 
 
 
@@ -3241,6 +3240,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
