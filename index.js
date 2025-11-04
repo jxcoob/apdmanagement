@@ -20,8 +20,8 @@ const token = process.env.TOKEN;
 
 
 
-const allowedRoles = ["1412324929013284914", "1412324929013284915","1412324928983928895","1429547095345463357"];
-const rolesToRemove = ["1412923193886507180", "1429487270418972763","1429487351322906625","1412324928941850665"];
+const allowedRoles = ["1376056345291128872", "1376057126446698506","1376059379702304858","1376059479120154694","1376059883740467321","1376060084219809812"];
+const rolesToRemove = ["1403021486393921588", "1376058102725476352","1418398177274363946","1376058534680203454"];
 const rolesToAdd = [
   "1376057925126193222","1376060126066114631","1424517967894286347",
   "1424517935300612230","1414046139765886977","1376058141128790076",
@@ -34,21 +34,26 @@ const rolesToAdd = [
 
 
 
-const retireReinstate_allowedRoles = ["1412324929013284915","1412324929013284914","1412324928983928898","1412324928983928897","1412324928983928895"];
+const retireReinstate_allowedRoles = ["1376057126446698506","1376056345291128872"];
 const retireReinstate_rolesToManage = [
-  "1412324928983928896","1429487470977749084","1429487598618935447",
-  "1412324928941850670","1412324928941850668","1412965384038125679",
-  "1412324928941850666","1429558625478770798","1429487738192789625",
-  "1429488036047224982","1429487891096145940","1429487950948864081",
-  "1429487804706197586","1429558533019668571","1429487020027285688",
-  "1412923193886507180","1429487270418972763","1429487351322906625",
-  "1412324928941850665","1429547095345463357","1412324928916815877",
-  "1412324928916815876","1412324928916815874","1412324928916815873",
-  "1412324928883265615","1412324928883265612","1412324928883265611",
-  "1412324928883265613","1412324928883265610","1412324928883265609",
-  "1412324928836862001","1412324928836862000","1412324928866357259",
-  "1412324928866357258","1412324928836861999","1412324928836861998",
-  "1412324928836861997","1412324928866357260",];
+  "1376057012378402927","1376057269296300123","1376057126446698506",
+  "1376057168318431332","1376057407775707328","1376057625015353485",
+  "1376057981355036722","1376058066847404052","1413344059203784747",
+  "1413350895361589380","1376057745723232286","1376057925126193222",
+  "1376060126066114631","1403021486393921588","1376058102725476352",
+  "1418398177274363946","1376058534680203454","1376058457966247976",
+  "1416275248805843005","1424517815360290957","1424517873086238740",
+  "1424517998407843941","1424517967894286347","1424517935300612230",
+  "1424518710303002687","1376059379702304858","1376059479120154694",
+  "1376059883740467321","1427473135439188089","1376059938744565820",
+  "1376060006822314044","1376060084219809812","1376357968127197206",
+  "1424524290643984385","1376358556256960573","1431451156801917101",
+  "1416610939364446279","1376358615509762150","1427151149655654452",
+  "1376359482652627024","1376359560658288640","1376359581063839805",
+  "1427173599650775100","1376359881451241504","1424590453076000908",
+  "1376359980927811674","1376360093884481686","1376360170015293482",
+  "1376360253297528893","1376360318737055876","1414046139765886977",
+  "1376058141128790076"];
 
 
 
@@ -57,10 +62,10 @@ const retireReinstate_rolesToManage = [
 
 
 
-const logArrestRoleId = "1429558625478770798";
-const logCitationRoleId = "1429558625478770798";
-const logWarrantRoleId = "1429558625478770798";
-const logReportRoleId = "1429558625478770798";
+const logArrestRoleId = "1376058141128790076";
+const logCitationRoleId = "1376058141128790076";
+const logWarrantRoleId = "1376058141128790076";
+const logReportRoleId = "1376058141128790076";
 
 
 
@@ -358,7 +363,7 @@ const commands = [
           .addChoices(
             {name: 'Patrol', value: 'Patrol'},
             {name: 'SWAT', value: 'SWAT'},
-            {name: 'FDB', value: 'FDB'},
+            {name: 'CID', value: 'FDB'},
             {name: 'Training', value: 'Training'},
           )
         )
@@ -640,12 +645,10 @@ const commands = [
     .addStringOption(opt => opt.setName('type').setDescription('Type of award').setRequired(true)
       .addChoices(
         {name: 'Medal of Valor', value: 'Medal of Valor'},
-        {name: "Chiefs's Recognition Award", value: "Chiefs's Recognition Award"},
-        {name: 'Legacy Award', value: 'Legacy Award'},
-        {name: "Chiefs's Officer of The Month", value: "Chief's Officer of the Month"},
-        {name: 'Distinguished Service Medal', value: 'Distinguished Service Medal'},
-        {name: 'Outstanding Tactics Award', value: 'Outstanding Tactics Award'},
-        {name: 'Lifesaving Award', value: 'Lifesaving Award'},
+        {name: "Medal of Honor", value: "Chiefs's Recognition Award"},
+        {name: 'Purple Heart Medal', value: 'Legacy Award'},
+        {name: "Distinguished Service", value: "Chief's Officer of the Month"},
+        {name: 'Chief’s Recognition', value: 'Distinguished Service Medal'},
       )
     )
     .toJSON(),
@@ -773,7 +776,7 @@ client.on('messageCreate', async message=>{
 
 
   if(message.content.startsWith('$say')){
-    const allowedSayRoles=['1412324928983928895'];
+    const allowedSayRoles=['1376056345291128872'];
     if(!message.member.roles.cache.some(r=>allowedSayRoles.includes(r.id))) return message.reply('You do not have permission.');
 
 
@@ -805,91 +808,6 @@ client.on('messageCreate', async message=>{
 
 // ====== INTERACTION HANDLER ======
 client.on('interactionCreate', async interaction=>{
-  if(interaction.isButton()) {
-    if(interaction.customId.startsWith('training_attend_')) {
-      const messageId = interaction.customId.split('_')[2];
-      
-      if(!trainingAttendees.has(messageId)) {
-        trainingAttendees.set(messageId, new Set());
-      }
-      
-      const attendees = trainingAttendees.get(messageId);
-      
-      if(attendees.has(interaction.user.id)) {
-        const removeButton = new ButtonBuilder()
-          .setCustomId(`training_remove_${messageId}`)
-          .setLabel('Remove Attendance')
-          .setStyle(ButtonStyle.Danger);
-        
-        const removeRow = new ActionRowBuilder()
-          .addComponents(removeButton);
-        
-        await interaction.reply({
-          content: "You've already marked yourself as attending to this training, would you like to remove your attendance?",
-          components: [removeRow],
-          flags: MessageFlags.Ephemeral
-        });
-      } else {
-        attendees.add(interaction.user.id);
-        await interaction.reply({
-          content: 'You have been marked as attending this training!',
-          flags: MessageFlags.Ephemeral
-        });
-      }
-      return;
-    }
-    
-    if(interaction.customId.startsWith('training_view_')) {
-      const messageId = interaction.customId.split('_')[2];
-      
-      if(!trainingAttendees.has(messageId) || trainingAttendees.get(messageId).size === 0) {
-        await interaction.reply({
-          content: 'No cadets have marked themselves as attending yet.',
-          flags: MessageFlags.Ephemeral
-        });
-        return;
-      }
-      
-      const attendees = trainingAttendees.get(messageId);
-      const attendeesList = Array.from(attendees).map(id => `<@${id}>`).join('\n');
-      
-      const embed = new EmbedBuilder()
-        .setTitle('Cadets Attending:')
-        .setDescription(attendeesList)
-        .setColor('#95A5A6')
-        .setFooter({text: 'FPD Management'})
-        .setTimestamp();
-      
-      await interaction.reply({
-        embeds: [embed],
-        flags: MessageFlags.Ephemeral
-      });
-      return;
-    }
-    
-    if(interaction.customId.startsWith('training_remove_')) {
-      const messageId = interaction.customId.split('_')[2];
-      
-      if(trainingAttendees.has(messageId)) {
-        const attendees = trainingAttendees.get(messageId);
-        attendees.delete(interaction.user.id);
-        
-        await interaction.update({
-          content: 'Your attendance has been removed.',
-          components: [],
-          flags: MessageFlags.Ephemeral
-        });
-      }
-      return;
-    }
-
-
-
-
-
-
-
-
     if(interaction.customId.startsWith('deployment_attend_')) {
       const messageId = interaction.customId.split('_')[2];
       
@@ -941,7 +859,7 @@ client.on('interactionCreate', async interaction=>{
         .setTitle('Operators Attending:')
         .setDescription(attendeesList)
         .setColor('#95A5A6')
-        .setFooter({text: 'FPD Management'})
+        .setFooter({text: 'APD Management'})
         .setTimestamp();
       
       await interaction.reply({
@@ -1177,7 +1095,7 @@ client.on('interactionCreate', async interaction=>{
     if(cmd==='infraction'){
       const sub = interaction.options.getSubcommand();
       const db = loadDB();
-      const logChannelId = '1412324929713733655';
+      const logChannelId = '1435084661133934622';
 
 
 
@@ -1187,7 +1105,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       if(sub==='execute' || sub==='revoke' || sub==='list'){
-        const allowedRoles = ['1412324928983928895', '1412324928983928895',"1412324929013284914","1412324929013284915"];
+        const allowedRoles = ['1376056345291128872', '1376057126446698506',"1376057625015353485"];
         const hasPermission = interaction.member.roles.cache.some(r => allowedRoles.includes(r.id));
         
         if(!hasPermission) {
@@ -1196,7 +1114,7 @@ client.on('interactionCreate', async interaction=>{
       }
       
       if(sub==='wipe'){
-        const allowedRoles = ['1412324929013284914','1412324929013284915'];
+        const allowedRoles = ['1376056345291128872'];
         const hasPermission = interaction.member.roles.cache.some(r => allowedRoles.includes(r.id));
         
         if(!hasPermission) {
@@ -1240,13 +1158,13 @@ client.on('interactionCreate', async interaction=>{
         const dmEmbed = new EmbedBuilder()
           .setTitle('Infraction Issued')
           .setColor('#95A5A6')
-          .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'Infraction ID',value:infractionId,inline:true},
             {name:'Type',value:type,inline:true},
             {name:'Reason',value:reason}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
 
 
@@ -1268,7 +1186,7 @@ client.on('interactionCreate', async interaction=>{
         const logEmbed = new EmbedBuilder()
           .setTitle('Infraction Log')
           .setColor('#95A5A6')
-          .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'Infraction ID',value:infractionId,inline:true},
             {name:'User',value:`${targetUser}`,inline:true},
@@ -1276,7 +1194,7 @@ client.on('interactionCreate', async interaction=>{
             {name:'Reason',value:reason},
             {name:'Issued by:',value:`${interaction.user.tag}`,inline:true}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
         if(division) logEmbed.addFields({name:'Division',value:division,inline:true});
         if(evidence) logEmbed.addFields({name:'Evidence',value:`[View Attachment](${evidence.url})`});
@@ -1336,7 +1254,7 @@ client.on('interactionCreate', async interaction=>{
         const revokeEmbed = new EmbedBuilder()
           .setTitle('Infraction Revoked')
           .setColor('#95A5A6')
-          .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'Infraction ID',value:infraction.id},
             {name:'User',value:`<@${infraction.userId}>`},
@@ -1344,7 +1262,7 @@ client.on('interactionCreate', async interaction=>{
             {name:'Reason',value:infraction.reason},
             {name:'Revoked By',value:`<@${interaction.user.id}>`}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
 
 
@@ -1363,7 +1281,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-        const logChannel = await interaction.client.channels.fetch('1412324929713733655');
+        const logChannel = await interaction.client.channels.fetch('1435084661133934622');
         if(logChannel) await logChannel.send({embeds:[revokeEmbed]});
 
 
@@ -1398,8 +1316,8 @@ client.on('interactionCreate', async interaction=>{
         const embed = new EmbedBuilder()
           .setTitle(`Active Infractions for ${targetUser.tag}`)
           .setColor('#95A5A6')
-          .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
-          .setFooter({text:'FPD Management'})
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
+          .setFooter({text:'APD Management'})
           .setTimestamp();
         for(const inf of userInfractions){
           embed.addFields({
@@ -1448,13 +1366,13 @@ client.on('interactionCreate', async interaction=>{
         const wipeEmbed = new EmbedBuilder()
           .setTitle('Infractions Wiped')
           .setColor('#95A5A6')
-          .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
             {name:'User',value:`${targetUser}`,inline:true},
             {name:'Infractions Removed',value:`${infractionCount}`,inline:true},
             {name:'Wiped By',value:`<@${interaction.user.id}>`,inline:true}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
 
 
@@ -1469,9 +1387,9 @@ client.on('interactionCreate', async interaction=>{
             embeds:[new EmbedBuilder()
               .setTitle('Your Infractions Have Been Wiped')
               .setColor('#95A5A6')
-              .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+              .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
               .setDescription(`All of your infractions (${infractionCount}) have been removed from the system.`)
-              .setFooter({text:'FPD Management'})
+              .setFooter({text:'APD Management'})
               .setTimestamp()]
           }); 
         }catch{}
@@ -1483,7 +1401,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-        const logChannel = await interaction.client.channels.fetch('1412324929713733655');
+        const logChannel = await interaction.client.channels.fetch('1435084661133934622');
         if(logChannel) await logChannel.send({embeds:[wipeEmbed]});
 
 
@@ -1570,7 +1488,7 @@ client.on('interactionCreate', async interaction=>{
           {name:'User',value:`${targetUser}`,inline:true},
           {name:'Promoted By',value:`<@${interaction.user.id}>`,inline:true}
         )
-        .setFooter({text:'FPD Management'})
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -1580,7 +1498,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const logChannel = await interaction.client.channels.fetch('1433555762491429034');
+      const logChannel = await interaction.client.channels.fetch('1435084057753948252');
       if(logChannel) await logChannel.send({embeds:[embed]});
 
 
@@ -1665,7 +1583,7 @@ client.on('interactionCreate', async interaction=>{
           {name:'Retired By',value:`<@${interaction.user.id}>`,inline:true},
           {name:'Roles Removed',value:`${userRoles.length}`,inline:true}
         )
-        .setFooter({text:'FPD Management'})
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -1675,7 +1593,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const logChannel = await interaction.client.channels.fetch('1433556014971752538');
+      const logChannel = await interaction.client.channels.fetch('1435084282795397140');
       if(logChannel) await logChannel.send({embeds:[embed]});
 
 
@@ -1768,7 +1686,7 @@ client.on('interactionCreate', async interaction=>{
           {name:'Reinstated By',value:`<@${interaction.user.id}>`,inline:true},
           {name:'Roles Restored',value:`${userRoles.length}`,inline:true}
         )
-        .setFooter({text:'FPD Management'})
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -1778,7 +1696,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const logChannel = await interaction.client.channels.fetch('1433556014971752538');
+      const logChannel = await interaction.client.channels.fetch('1435084282795397140');
       if(logChannel) await logChannel.send({embeds:[embed]});
 
 
@@ -1799,7 +1717,7 @@ client.on('interactionCreate', async interaction=>{
 
 
     else if(cmd==='special-permission-log'){
-      const allowedRoles = ['1412324928983928895'];
+      const allowedRoles = ['1376056345291128872'];
       if(!interaction.member.roles.cache.some(r=>allowedRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -1867,7 +1785,7 @@ client.on('interactionCreate', async interaction=>{
           {name:'Permission',value:permission},
           {name:'Reason',value:reason}
         )
-        .setFooter({text:'FPD Management'})
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -1888,7 +1806,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const specialPermChannel = await interaction.client.channels.fetch('1433548203894112296');
+      const specialPermChannel = await interaction.client.channels.fetch('1435083709719248987');
       if(specialPermChannel) await specialPermChannel.send({embeds:[embed]});
 
 
@@ -1970,7 +1888,7 @@ client.on('interactionCreate', async interaction=>{
           {name:'Revoked By',value:`<@${interaction.user.id}>`,inline:true},
           {name:'Original Permission',value:permission.permission}
         )
-        .setFooter({text:'FPD Management'})
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -1991,7 +1909,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-      const specialPermChannel = await interaction.client.channels.fetch('1433548203894112296');
+      const specialPermChannel = await interaction.client.channels.fetch('1435083709719248987');
       if(specialPermChannel) await specialPermChannel.send({embeds:[embed]});
 
 
@@ -2022,7 +1940,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       if(sub==='log'){
-        const allowedReviewRoles = ['1412324928983928895', '1429487470977749084', '1412324928983928896'];
+        const allowedReviewRoles = ['1376056345291128872', '1376057126446698506', '1376057407775707328'];
         const hasPermission = interaction.member.roles.cache.some(r => allowedReviewRoles.includes(r.id));
         
         if(!hasPermission) {
@@ -2094,7 +2012,7 @@ client.on('interactionCreate', async interaction=>{
             {name:'Duration',value:duration,inline:true},
             {name:'Notes',value:notes}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
 
 
@@ -2124,7 +2042,7 @@ client.on('interactionCreate', async interaction=>{
             {name:'Reviewer',value:`<@${interaction.user.id}>`,inline:true},
             {name:'Notes',value:notes}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
 
 
@@ -2134,7 +2052,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-        const reviewChannel = await interaction.client.channels.fetch('1433556479754899568');
+        const reviewChannel = await interaction.client.channels.fetch('1435083492760223814');
         if(reviewChannel) await reviewChannel.send({embeds:[logEmbed]});
 
 
@@ -2155,7 +2073,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       else if(sub==='view'){
-        const allowedReviewRoles = ['1412324928983928895', '1429487470977749084', '1412324928983928896'];
+        const allowedReviewRoles = ['1376056345291128872', '1376057126446698506', '1376057407775707328'];
         const hasPermission = interaction.member.roles.cache.some(r => allowedReviewRoles.includes(r.id));
         
         if(!hasPermission) {
@@ -2210,7 +2128,7 @@ client.on('interactionCreate', async interaction=>{
             {name:'Reviewer',value:`<@${review.reviewer}>`,inline:true},
             {name:'Date',value:`<t:${Math.floor(new Date(review.timestamp).getTime()/1000)}:f>`,inline:true}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
         
         if(review.notes) embed.addFields({name:'Notes',value:review.notes});
@@ -2233,7 +2151,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       else if(sub==='clear'){
-        const allowedReviewRoles = ['1412324928983928895', '1429487470977749084', '1412324928983928896'];
+        const allowedReviewRoles = ['1376056345291128872', '1376057126446698506'];
         const hasPermission = interaction.member.roles.cache.some(r => allowedReviewRoles.includes(r.id));
         
         if(!hasPermission) {
@@ -2297,7 +2215,7 @@ client.on('interactionCreate', async interaction=>{
             {name:'User',value:`${user}`,inline:true},
             {name:'Cleared By',value:`<@${interaction.user.id}>`,inline:true}
           )
-          .setFooter({text:'FPD Management'})
+          .setFooter({text:'APD Management'})
           .setTimestamp();
 
 
@@ -2307,7 +2225,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-        const logChannel = await interaction.client.channels.fetch('1433556479754899568');
+        const logChannel = await interaction.client.channels.fetch('1435083492760223814');
         if(logChannel) await logChannel.send({embeds:[clearEmbed]});
 
 
@@ -2329,7 +2247,7 @@ client.on('interactionCreate', async interaction=>{
 
 
 else if(cmd==='massshift-start'){
-  const massshiftAllowedRoles = ['1412324928983928895'];
+  const massshiftAllowedRoles = ['1376057126446698506','1376056345291128872'];
   if(!interaction.member.roles.cache.some(r => massshiftAllowedRoles.includes(r.id))){
     return interaction.reply({content:'You do not have permission to start a mass shift.', flags: MessageFlags.Ephemeral});
   }
@@ -2349,11 +2267,11 @@ else if(cmd==='massshift-start'){
       ...(assistantWC ? [{ name: 'Assistant Watch Commander', value: `${assistantWC}`, inline: false }] : []),
       { name: 'Supervisor(s)', value: supervisorsInput, inline: false }
     )
-    .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+    .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
     .setTimestamp();
 
 
-  const massShiftChannelId = '1412324929713733656';
+  const massShiftChannelId = '1414069284019241084';
   const massShiftChannel = await interaction.client.channels.fetch(massShiftChannelId);
   if(!massShiftChannel) return interaction.reply({content:'Mass shift channel not found.', flags: MessageFlags.Ephemeral});
 
@@ -2376,7 +2294,7 @@ else if(cmd==='massshift-start'){
 
 
     else if(cmd==='massshift-end'){
-      const massshiftAllowedRoles = ['1412324928983928895'];
+      const massshiftAllowedRoles = ['1376057126446698506','1376056345291128872'];
       const hasPermission = interaction.member.roles.cache.some(r => massshiftAllowedRoles.includes(r.id));
       
       if(!hasPermission) {
@@ -2394,7 +2312,7 @@ else if(cmd==='massshift-start'){
         .setTitle('Fairbourne Police Department - End')
         .setDescription('The mass shift has now concluded. Thank you to all deputies who attending this mass shift, your hard work will not go unnoticed!')
         .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Concluded by ${interaction.user.tag}`})
         .setTimestamp();
 
@@ -2405,7 +2323,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const massShiftEndChannelId = '1412324929713733656';
+      const massShiftEndChannelId = '1414069284019241084';
       const massShiftEndChannel = await interaction.client.channels.fetch(massShiftEndChannelId);
       
       if(!massShiftEndChannel) {
@@ -2466,7 +2384,7 @@ else if(cmd==='massshift-start'){
         .setDescription(`**ID:** ${arrestId}\n**Suspect:** ${username}\n**Charges:** ${charges}`)
         .setColor('#95A5A6')
         .setThumbnail('https://images-ext-1.discordapp.net/external/xt1CuOBOZ4m5QYMHzGi-ERzaeC5dIJveECS88WPKGkQ/%3Fsize%3D512/https/cdn.discordapp.com/icons/1412324928333807689/a8773509f9faa0ad052e60af2a92faea.png?format=webp&quality=lossless')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Executed by ${interaction.user.tag}`})
         .setTimestamp();
 
@@ -2477,7 +2395,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const arrestChannelId = '1429554783077007472';
+      const arrestChannelId = '1413340699138457741';
       const arrestChannel = await interaction.client.channels.fetch(arrestChannelId);
       
       if(arrestChannel) {
@@ -2527,7 +2445,7 @@ else if(cmd==='massshift-start'){
         .setDescription(`**ID:** ${citationId}\n**Suspect:** ${username}\n**Reason(s):** ${reason}\n**Fine:** ${fine}`)
         .setColor('#95A5A6')
         .setThumbnail('https://images-ext-1.discordapp.net/external/xt1CuOBOZ4m5QYMHzGi-ERzaeC5dIJveECS88WPKGkQ/%3Fsize%3D512/https/cdn.discordapp.com/icons/1412324928333807689/a8773509f9faa0ad052e60af2a92faea.png?format=webp&quality=lossless')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Executed by ${interaction.user.tag}`})
         .setTimestamp();
 
@@ -2538,7 +2456,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const citationChannelId = '1429554688444862594';
+      const citationChannelId = '1435084820081414235';
       const citationChannel = await interaction.client.channels.fetch(citationChannelId);
       
       if(citationChannel) {
@@ -2683,8 +2601,8 @@ else if(cmd==='massshift-start'){
           {name:'Outcome',value:outcome,inline:false},
           {name:'Submitted By',value:`${interaction.user.tag}`,inline:false}
         )
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
-        .setFooter({text:'FPD Management'})
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -2694,7 +2612,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const reportChannelId = '1433558045530787973';
+      const reportChannelId = '1435086366873747657';
       const reportChannel = await interaction.client.channels.fetch(reportChannelId);
       
       if(reportChannel) {
@@ -2743,7 +2661,7 @@ else if(cmd==='massshift-start'){
         .setDescription(`**ID:** ${warrantId}\n**Suspect:** ${username}\n**Charges:** ${charges}`)
         .setColor('#95A5A6')
         .setThumbnail('https://images-ext-1.discordapp.net/external/xt1CuOBOZ4m5QYMHzGi-ERzaeC5dIJveECS88WPKGkQ/%3Fsize%3D512/https/cdn.discordapp.com/icons/1412324928333807689/a8773509f9faa0ad052e60af2a92faea.png?format=webp&quality=lossless')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Executed by ${interaction.user.tag}`})
         .setTimestamp();
 
@@ -2788,8 +2706,8 @@ else if(cmd==='massshift-start'){
 
 
 
-      const warrantChannelId = '1433552971291037716';
-      const warrantAnnounceChannelId = '1412324931013836804';
+      const warrantChannelId = '1426020925933092996';
+      const warrantAnnounceChannelId = '1416608622019870792';
 
 
 
@@ -2834,7 +2752,7 @@ else if(cmd==='massshift-start'){
 
 
     else if(cmd==='statistics'){
-      if(!interaction.member.roles.cache.some(r => r.id === '1429558625478770798')){
+      if(!interaction.member.roles.cache.some(r => r.id === '1376058141128790076')){
         return interaction.reply({content:'You do not have permission to view statistics.', flags: MessageFlags.Ephemeral});
       }
 
@@ -2865,8 +2783,8 @@ else if(cmd==='massshift-start'){
           {name:'Arrests Issued',value:`${userArrests.length}`,inline:true},
           {name:'Warrants Issued',value:`${userWarrants.length}`,inline:true}
         )
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
-        .setFooter({text:'FPD Management'})
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
+        .setFooter({text:'APD Management'})
         .setTimestamp();
 
 
@@ -2886,326 +2804,10 @@ else if(cmd==='massshift-start'){
 
 
 
-    else if(cmd==='training-vote'){
-      const allowedTrainingRoles = ['1412324928983928895', '1412324928916815874'];
-      if(!interaction.member.roles.cache.some(r => allowedTrainingRoles.includes(r.id))){
-        return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
-      }
-
-
-
-
-
-
-
-
-      const embed = new EmbedBuilder()
-        .setTitle('FPD Cadet Training Vote')
-        .setDescription(`A Cadet Training Vote has been initiated by ${interaction.user} if you are a <@&1412923193886507180> and have the <@&1429487351322906625> role, please mark yourself as attending to join the upcoming Officer Training. This training will start at the time indicated by the trainer who initiated the training. If you have marked yourself attending, please ensure the following by the time the training will start.\n\n• Ready and in the department training server.\n• Spawned in the Crown Victoria with the correct livery and accessories in accordance to the SOP.\n• M4A1 in trunk. Have equipped the baton, pepper spray, taser, handcuffs, MDT, Glock 19/Shield 9, duty belt, and flashlight.\n• Ready and seated in the briefing room.`)
-        .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
-        .setTimestamp();
-
-
-
-
-
-
-
-
-      const trainingChannelId = '1412324930015465495';
-      const trainingChannel = await interaction.client.channels.fetch(trainingChannelId);
-      
-      if(!trainingChannel) {
-        return interaction.reply({content:'Training channel not found.', flags: MessageFlags.Ephemeral});
-      }
-
-
-
-
-
-
-
-
-      const attendButton = new ButtonBuilder()
-        .setCustomId(`training_attend_PLACEHOLDER`)
-        .setLabel('Attending')
-        .setStyle(ButtonStyle.Success);
-
-
-
-
-
-
-
-
-      const viewButton = new ButtonBuilder()
-        .setCustomId(`training_view_PLACEHOLDER`)
-        .setLabel('View Attendance')
-        .setStyle(ButtonStyle.Secondary);
-
-
-
-
-
-
-
-
-      const buttonRow = new ActionRowBuilder()
-        .addComponents(attendButton, viewButton);
-
-
-
-
-
-
-
-
-      const message = await trainingChannel.send({
-        content: '<@&1429487351322906625>',
-        embeds: [embed],
-        components: [buttonRow],
-        allowedMentions: { roles: ['1429487351322906625'] }
-      });
-
-
-
-
-
-
-
-
-      const updatedAttendButton = new ButtonBuilder()
-        .setCustomId(`training_attend_${message.id}`)
-        .setLabel('Attending')
-        .setStyle(ButtonStyle.Success);
-
-
-
-
-
-
-
-
-      const updatedViewButton = new ButtonBuilder()
-        .setCustomId(`training_view_${message.id}`)
-        .setLabel('View Attendance')
-        .setStyle(ButtonStyle.Secondary);
-
-
-
-
-
-
-
-
-      const updatedButtonRow = new ActionRowBuilder()
-        .addComponents(updatedAttendButton, updatedViewButton);
-
-
-
-
-
-
-
-
-      await message.edit({ components: [updatedButtonRow] });
-
-
-
-
-
-
-
-
-      trainingAttendees.set(message.id, new Set());
-
-
-
-
-
-
-
-
-      await interaction.reply({content:'Training vote initiated successfully!', flags: MessageFlags.Ephemeral});
-    }
-
-
-
-
-
-
-
-
-    else if(cmd==='training-start'){
-      const allowedTrainingRoles = ['1412324928983928895', '1412324928916815874'];
-      if(!interaction.member.roles.cache.some(r => allowedTrainingRoles.includes(r.id))){
-        return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
-      }
-
-
-
-
-
-
-
-
-      let attendeesList = '';
-      let latestMessageId = null;
-      let latestTimestamp = 0;
-      
-      for(const [messageId, attendees] of trainingAttendees.entries()) {
-        const timestamp = Number((BigInt(messageId) >> 22n) + 1420070400000n);
-        if(timestamp > latestTimestamp && attendees.size > 0) {
-          latestTimestamp = timestamp;
-          latestMessageId = messageId;
-        }
-      }
-      
-      if(latestMessageId && trainingAttendees.get(latestMessageId).size > 0) {
-        const attendees = trainingAttendees.get(latestMessageId);
-        attendeesList = Array.from(attendees).map(id => `<@${id}>`).join(' ');
-      }
-
-
-
-
-
-
-
-
-      const embed = new EmbedBuilder()
-        .setTitle('FPD Cadet Training Start')
-        .setDescription(`A Cadet Training has started by ${interaction.user}. If you are a <@&1412923193886507180> and have the <@&1429487351322906625> role, and you've marked yourself as attending to the vote, you are required to join the training. Please ensure the following to get ready for the training.\n\n• Ready and in the department training server.\n• Spawned in the Crown Victoria with the correct livery and accessories in accordance to the SOP.\n• M4A1 in trunk. Have equipped the baton, pepper spray, taser, handcuffs, MDT, Glock 19/Shield 9, duty belt, and flashlight.\n• Ready and seated in the briefing room.`)
-        .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
-        .setTimestamp();
-
-
-
-
-
-
-
-
-      const trainingChannelId = '1412324930015465495';
-      const trainingChannel = await interaction.client.channels.fetch(trainingChannelId);
-      
-      if(!trainingChannel) {
-        return interaction.reply({content:'Training channel not found.', flags: MessageFlags.Ephemeral});
-      }
-
-
-
-
-
-
-
-
-      const mentionContent = attendeesList ? `<@&1429487351322906625> ${attendeesList}` : '<@&1429487351322906625>';
-
-
-
-
-
-
-
-
-      await trainingChannel.send({
-        content: mentionContent,
-        embeds: [embed],
-        allowedMentions: { roles: ['1429487351322906625'], users: latestMessageId ? Array.from(trainingAttendees.get(latestMessageId)) : [] }
-      });
-
-
-
-
-
-
-
-
-      await interaction.reply({content:'Training started successfully!', flags: MessageFlags.Ephemeral});
-    }
-
-
-
-
-
-
-
-
-    else if(cmd==='training-end'){
-      const allowedTrainingRoles = ['1412324928983928895', '1412324928916815874'];
-      if(!interaction.member.roles.cache.some(r => allowedTrainingRoles.includes(r.id))){
-        return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
-      }
-
-
-
-
-
-
-
-
-      const embed = new EmbedBuilder()
-        .setTitle('Cadet Training Ended')
-        .setDescription('The recent cadet training has now concluded. Thank you to all the cadets that have attended, your results will be posted shortly in https://discord.com/channels/1412324928333807689/1429545770763161813.\n\n We appreciate your dedication and hard work during the training session! If you have any questions or feedback, please feel free to reach out to your trainers.')
-        .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
-        .setFooter({text:`Concluded by ${interaction.user.tag}`})
-        .setTimestamp();
-
-
-
-
-
-
-
-
-      const trainingChannelId = '1412324930015465495';
-      const trainingChannel = await interaction.client.channels.fetch(trainingChannelId);
-      
-      if(!trainingChannel) {
-        return interaction.reply({content:'Training channel not found.', flags: MessageFlags.Ephemeral});
-      }
-
-
-
-
-
-
-
-
-      await trainingChannel.send({embeds: [embed]});
-
-
-
-
-
-
-
-
-      trainingAttendees.clear();
-
-
-
-
-
-
-
-
-      await interaction.reply({content:'Training ended successfully and attendance reset!', flags: MessageFlags.Ephemeral});
-    }
-
-
-
-
-
-
 
 
     else if(cmd==='award'){
-      const allowedAwardRoles = ['1412324928983928895'];
+      const allowedAwardRoles = ['1376056345291128872','1376057126446698506'];
       if(!interaction.member.roles.cache.some(r => allowedAwardRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -3229,9 +2831,9 @@ else if(cmd==='massshift-start'){
 
       const embed = new EmbedBuilder()
         .setTitle('Fairbourne Police Department Award')
-        .setDescription(`Please congratulate ${targetUser} for earning the ${awardType}!\n\nCongratulations ${targetUser} for achieving this milestone within your career in FPD. Thank you for your hard work and dedication to the department.`)
+        .setDescription(`Please congratulate ${targetUser} for earning the ${awardType}!\n\nCongratulations ${targetUser} for achieving this milestone within your career in APD. Thank you for your hard work and dedication to the department.`)
         .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Feel free to congratulate them in「💬」public-chat`})
         .setTimestamp();
 
@@ -3279,7 +2881,7 @@ else if(cmd==='massshift-start'){
 
 
     else if(cmd==='deployment-vote'){
-      const allowedDeploymentRoles = ['1412324928866357259', '1412324928866357258'];
+      const allowedDeploymentRoles = ['1376358556256960573', '1416610939364446279','1376358615509762150'];
       if(!interaction.member.roles.cache.some(r => allowedDeploymentRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -3288,10 +2890,10 @@ else if(cmd==='massshift-start'){
 
 
       const embed = new EmbedBuilder()
-        .setTitle('<:checklist:1428897204688650321> SWAT Deployment - Vote')
+        .setTitle('SWAT Deployment - Vote')
         .setDescription(`> A SWAT Deployment vote has been initiated by ${interaction.user} Please mark yourself attending to join the upcoming deployment. In order for this deployment to start, it'll require at least 2+ operators attending.\n\n **If you mark yourself as attending, you are required to join the deployment.**`)
         .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setTimestamp();
 
 
@@ -3301,7 +2903,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const deploymentChannelId = '1412324930854584450';
+      const deploymentChannelId = '1418055104044732527';
       const deploymentChannel = await interaction.client.channels.fetch(deploymentChannelId);
       
       if(!deploymentChannel) {
@@ -3426,7 +3028,7 @@ else if(cmd==='massshift-start'){
 
 
     else if(cmd==='deployment-start'){
-      const allowedDeploymentRoles = ['1412324928866357259', '1412324928866357258'];
+      const allowedDeploymentRoles = ['1376358556256960573', '1416610939364446279','1376358615509762150'];
       if(!interaction.member.roles.cache.some(r => allowedDeploymentRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -3459,10 +3061,10 @@ else if(cmd==='massshift-start'){
 
 
       const embed = new EmbedBuilder()
-        .setTitle('<:alert:1428897341355851856> SWAT Deployment - Start')
+        .setTitle('SWAT Deployment - Start')
         .setDescription(`> A SWAT Deployment has now commenced by ${interaction.user} If you have marked yourself attending to the deployment vote, you are required to attend this deployment.\n\n > Please ensure you are in proper uniform and have all necessary equipment, then head your way down to the briefing room for assignments and deployment details.`)
         .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setTimestamp();
 
 
@@ -3472,7 +3074,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const deploymentChannelId = '1412324930854584450';
+      const deploymentChannelId = '1418055104044732527';
       const deploymentChannel = await interaction.client.channels.fetch(deploymentChannelId);
       
       if(!deploymentChannel) {
@@ -3528,7 +3130,7 @@ else if(cmd==='massshift-start'){
 
 
     else if(cmd==='deployment-end'){
-      const allowedDeploymentRoles = ['1412324928866357259', '1412324928866357258'];
+      const allowedDeploymentRoles = ['1376358556256960573', '1416610939364446279','1376358615509762150'];
       if(!interaction.member.roles.cache.some(r => allowedDeploymentRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -3537,10 +3139,10 @@ else if(cmd==='massshift-start'){
 
 
       const embed = new EmbedBuilder()
-        .setTitle('<:checkmark:1428897510037913736> SWAT Deployment - Ended')
+        .setTitle('SWAT Deployment - Ended')
         .setDescription(`> The recent SWAT Deployment has now concluded by ${interaction.user}.\n\n > Thank you to all operators who have attended the deployment. If you missed this one, don't worry! You'll be able to attend the other deployments usually hosted every other day unless said otherwise by SWAT Command.`)
         .setColor('#95A5A6')
-        .setImage('https://media.discordapp.net/attachments/1419142336767594526/1433554668130275368/FPD_Footer.png?ex=69051d53&is=6903cbd3&hm=75110e8b69ae9bc1c597a62f229420c65ec75b647e1dea08015ec2049e799938&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:`Concluded by ${interaction.user.tag}`})
         .setTimestamp();
 
@@ -3551,7 +3153,7 @@ else if(cmd==='massshift-start'){
 
 
 
-      const deploymentChannelId = '1412324930854584450';
+      const deploymentChannelId = '1418055104044732527';
       const deploymentChannel = await interaction.client.channels.fetch(deploymentChannelId);
       
       if(!deploymentChannel) {
@@ -3612,4 +3214,5 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
