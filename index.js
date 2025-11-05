@@ -1105,11 +1105,12 @@ client.on('interactionCreate', async interaction=>{
         const dmEmbed = new EmbedBuilder()
           .setTitle('Infraction Issued')
           .setColor('#0C588A')
+          .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
-            {name:'Infraction ID',value:infractionId,inline:true},
             {name:'Type',value:type,inline:true},
-            {name:'Reason',value:reason}
+            {name:'Reason',value:reason},
+            {name:'Infraction ID',value:infractionId,inline:true}
           )
           .setFooter({text:'APD Management'})
           .setTimestamp();
@@ -1133,13 +1134,14 @@ client.on('interactionCreate', async interaction=>{
         const logEmbed = new EmbedBuilder()
           .setTitle('Infraction Log')
           .setColor('#0C588A')
+          .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
-            {name:'Infraction ID',value:infractionId,inline:true},
             {name:'User',value:`${targetUser}`,inline:true},
             {name:'Type',value:type,inline:true},
             {name:'Reason',value:reason},
-            {name:'Issued by:',value:`${interaction.user.tag}`,inline:true}
+            {name:'Issued by:',value:`${interaction.user.tag}`,inline:true},
+            {name:'Infraction ID',value:infractionId,inline:true}
           )
           .setFooter({text:'APD Management'})
           .setTimestamp();
@@ -1201,13 +1203,14 @@ client.on('interactionCreate', async interaction=>{
         const revokeEmbed = new EmbedBuilder()
           .setTitle('Infraction Revoked')
           .setColor('#0C588A')
+          .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .addFields(
-            {name:'Infraction ID',value:infraction.id},
             {name:'User',value:`<@${infraction.userId}>`},
             {name:'Original Type',value:infraction.type},
             {name:'Reason',value:infraction.reason},
-            {name:'Revoked By',value:`<@${interaction.user.id}>`}
+            {name:'Revoked By',value:`<@${interaction.user.id}>`},
+            {name:'Infraction ID',value:infraction.id},
           )
           .setFooter({text:'APD Management'})
           .setTimestamp();
@@ -1263,6 +1266,7 @@ client.on('interactionCreate', async interaction=>{
         const embed = new EmbedBuilder()
           .setTitle(`Active Infractions for ${targetUser.tag}`)
           .setColor('#0C588A')
+          .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
           .setFooter({text:'APD Management'})
           .setTimestamp();
@@ -2838,7 +2842,7 @@ client.on('interactionCreate', async interaction=>{
 
 
       const embed = new EmbedBuilder()
-        .setTitle('SWAT Deployment - Vote')
+        .setTitle('<:check:1435486854928535632> SWAT Deployment - Vote')
         .setDescription(`> A SWAT Deployment vote has been initiated by ${interaction.user} Please mark yourself attending to join the upcoming deployment. In order for this deployment to start, it'll require at least 2+ operators attending.\n\n **If you mark yourself as attending, you are required to join the deployment.**`)
         .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
@@ -2985,7 +2989,7 @@ else if(cmd==='deployment-end'){
       await interaction.reply({content:'Processing deployment end...', flags: MessageFlags.Ephemeral});
 
       const embed = new EmbedBuilder()
-        .setTitle('SWAT Deployment - Ended')
+        .setTitle('<:x_:1435486937590009906> SWAT Deployment - Ended')
         .setDescription(`> The recent SWAT Deployment has now concluded by ${interaction.user}.\n\n > Thank you to all operators who have attended the deployment. If you missed this one, don't worry! You'll be able to attend the other deployments usually hosted every other day unless said otherwise by SWAT Command.`)
         .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
@@ -3031,7 +3035,7 @@ else if(cmd==='deployment-end'){
       }
 
       const embed = new EmbedBuilder()
-        .setTitle('SWAT Deployment - Start')
+        .setTitle('<:arrow:1421672106902687804>SWAT Deployment - Start')
         .setDescription(`> A SWAT Deployment has now commenced by ${interaction.user} If you have marked yourself attending to the deployment vote, you are required to attend this deployment.\n\n > Please ensure you are in proper uniform and have all necessary equipment, then head your way down to the briefing room for assignments and deployment details.`)
         .setColor('#0C588A')
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
@@ -3150,6 +3154,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
