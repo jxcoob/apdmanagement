@@ -1160,7 +1160,7 @@ client.on('interactionCreate', async interaction=>{
           content: `${targetUser}`,
           embeds:[logEmbed]
         });
-        await interaction.reply({content:`Infraction ${infractionId} issued to ${targetUser.tag}.`, flags: MessageFlags.Ephemeral})
+        await interaction.reply({content:`Infraction ${infractionId} issued to ${targetUser.tag}.`, flags: MessageFlags.Ephemeral});
 
 
 
@@ -3156,6 +3156,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
