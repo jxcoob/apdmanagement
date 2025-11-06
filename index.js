@@ -1155,20 +1155,13 @@ client.on('interactionCreate', async interaction=>{
 
 
 
-        const logChannel = await interaction.client.channels.fetch(logChannelId);
+const logChannel = await interaction.client.channels.fetch(logChannelId);
         if(logChannel) await logChannel.send({
           content: `${targetUser}`,
           embeds:[logEmbed]
         });
         await interaction.reply({content:`Infraction ${infractionId} issued to ${targetUser.tag}.`, flags: MessageFlags.Ephemeral});
-
-
-
-
-
-
-
-
+      }
       else if(sub==='revoke'){
         const id = interaction.options.getString('id');
         const targetUser = interaction.options.getUser('user');
@@ -3156,6 +3149,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
