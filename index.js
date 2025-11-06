@@ -597,6 +597,7 @@ const commands = [
         {name: 'Purple Heart Medal', value: 'Purple Heart Medal'},
         {name: 'Distinguished Service', value: 'Distinguished Service'},
         {name: 'Chiefs Recognition', value: 'Chiefs Recognition'},
+        {name: 'Officer of the Week', value: 'Officer of the Week'},
       )
     )
     .toJSON(),
@@ -3149,6 +3150,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
