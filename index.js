@@ -1369,7 +1369,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
 
 
     else if(cmd==='roleprobie'){
-      const allowedRoles = ['1412324929013284915', '1412324928983928895'];
+      const allowedRoles = ['1376056345291128872', '1376057126446698506'];
       if(!interaction.member.roles.cache.some(r=>allowedRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -3147,6 +3147,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
