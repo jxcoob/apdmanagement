@@ -137,7 +137,14 @@ function generateID(db) {
 
 
 
+function loadPermissions() {
+  if(fs.existsSync(permissionsPath)) return JSON.parse(fs.readFileSync(permissionsPath));
+  return {};
+}
 
+function savePermissions(permissions) {
+  fs.writeFileSync(permissionsPath, JSON.stringify(permissions, null, 2));
+}
 
 
 function loadCounter() {
@@ -3140,6 +3147,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
