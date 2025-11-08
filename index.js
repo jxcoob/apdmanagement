@@ -34,7 +34,7 @@ const rolesToAdd = [
 
 
 
-const retireReinstate_allowedRoles = ["1376057126446698506","1376056345291128872"];
+const retireReinstate_allowedRoles = ["1376057126446698506","1376056345291128872","1376057126446698506"];
 const retireReinstate_rolesToManage = [
   "1376057012378402927","1376057269296300123","1376057126446698506",
   "1376057168318431332","1376057407775707328","1376057625015353485",
@@ -3150,6 +3150,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
