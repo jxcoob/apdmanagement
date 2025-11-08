@@ -1,4 +1,4 @@
-require('dotenv').config();function loadRetiredUsers() {
+require('dotenv').config();
 const { Client, GatewayIntentBits, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder, REST, Routes, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, ContainerBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, SeparatorBuilder, SeparatorSpacingSize, TextDisplayBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -3140,6 +3140,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
