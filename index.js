@@ -34,7 +34,7 @@ const rolesToAdd = [
 
 
 
-const retireReinstate_allowedRoles = ["1376057126446698506","1376056345291128872","1376057126446698506"];
+const retireReinstate_allowedRoles = ["1376057126446698506","1376056345291128872"];
 const retireReinstate_rolesToManage = [
   "1376057012378402927","1376057269296300123","1376057126446698506",
   "1376057168318431332","1376057407775707328","1376057625015353485",
@@ -1466,7 +1466,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
 
 
     else if(cmd==='retire'){
-      const allowedRoles = ['1412324928983928895'];
+      const allowedRoles = ['1376056345291128872','1376057126446698506'];
       if(!interaction.member.roles.cache.some(r=>allowedRoles.includes(r.id))){
         return interaction.reply({content:'You do not have permission to use this command.', flags: MessageFlags.Ephemeral});
       }
@@ -3150,6 +3150,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
