@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config();function loadRetiredUsers() {
 const { Client, GatewayIntentBits, EmbedBuilder, PermissionFlagsBits, SlashCommandBuilder, REST, Routes, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, ButtonBuilder, ButtonStyle, MessageFlags, ContainerBuilder, MediaGalleryBuilder, MediaGalleryItemBuilder, SeparatorBuilder, SeparatorSpacingSize, TextDisplayBuilder } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
@@ -168,32 +168,24 @@ function saveCounter(counter) {
 function loadRetiredUsers() {
   if(fs.existsSync(retiredUsersPath)) {
     const data = JSON.parse(fs.readFileSync(retiredUsersPath));
-    // Convert the plain object back to a Map
-    return new Map(Object.entries(data));
+    // Convert the plain object back to a Map, ensuring values stay as arrays
+    const map = new Map();
+    for(const [userId, roles] of Object.entries(data)) {
+      // Make sure roles is always an array
+      map.set(userId, Array.isArray(roles) ? roles : [roles]);
+    }
+    return map;
   }
   return new Map();
 }
 
 function saveRetiredUsers(retiredUsersMap) {
   // Convert Map to plain object for JSON serialization
-  const obj = Object.fromEntries(retiredUsersMap);
+  const obj = {};
+  for(const [userId, roles] of retiredUsersMap.entries()) {
+    obj[userId] = roles;
+  }
   fs.writeFileSync(retiredUsersPath, JSON.stringify(obj, null, 2));
-}
-
-function loadPermissions() {
-  if(fs.existsSync(permissionsPath)) return JSON.parse(fs.readFileSync(permissionsPath));
-  return {};
-}
-
-
-
-
-
-
-
-
-function savePermissions(permissions) {
-  fs.writeFileSync(permissionsPath, JSON.stringify(permissions, null, 2));
 }
 
 
@@ -3148,6 +3140,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
