@@ -2556,7 +2556,7 @@ else if(cmd==='reinstate'){
 
 
 
-      const reportChannelId = '1435086366873747657';
+      const reportChannelId = '1448168569312382976';
       const reportChannel = await interaction.client.channels.fetch(reportChannelId);
       
       if(reportChannel) {
@@ -3147,6 +3147,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
