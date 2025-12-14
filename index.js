@@ -1429,7 +1429,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
       const embed = new EmbedBuilder()
         .setTitle('User Promoted to Probie')
         .setColor('#0C588A')
-        .setImage('https://media.discordapp.net/attachments/1410429525329973379/1420971878981570622/CADET_TRAINING.png?ex=68efba70&is=68ee68f0&hm=91677fa47a337403cc4804fa00e289e23a6f9288aeed39037d10c3bcc0e6a2e0&=&format=webp&quality=lossless')
+        .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=694006b6&is=693eb536&hm=f726bdda1a4136a1f40e5db2a20697e66db904a6a5e785f51273e1f8f6492f50&=&format=webp&quality=lossless')
         .addFields(
           {name:'User',value:`${targetUser}`,inline:true},
           {name:'Promoted By',value:`<@${interaction.user.id}>`,inline:true}
@@ -3147,6 +3147,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
