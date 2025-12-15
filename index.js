@@ -1106,7 +1106,7 @@ client.on('interactionCreate', async interaction=>{
           .setTitle('Infraction Issued')
           .setColor('#0C588A')
           .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
-          .setImage('https://media.discordapp.net/attachments/1435105704422936687/1435819787937779732/image.png?ex=690d5ae1&is=690c0961&hm=62073157c0213fbb5d4360856f17b9b9def2aa5d9fbdc91916dcaf220166699c&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .addFields(
             {name:'Type',value:type,inline:true},
             {name:'Reason',value:reason},
@@ -1135,7 +1135,7 @@ client.on('interactionCreate', async interaction=>{
           .setTitle('Infraction Log')
           .setColor('#0C588A')
           .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
-          .setImage('https://media.discordapp.net/attachments/1435105704422936687/1435819787937779732/image.png?ex=690d5ae1&is=690c0961&hm=62073157c0213fbb5d4360856f17b9b9def2aa5d9fbdc91916dcaf220166699c&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .addFields(
             {name:'User',value:`${targetUser}`,inline:true},
             {name:'Type',value:type,inline:true},
@@ -1199,7 +1199,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
           .setTitle('Infraction Revoked')
           .setColor('#0C588A')
           .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
-          .setImage('https://media.discordapp.net/attachments/1435105704422936687/1435819787937779732/image.png?ex=690d5ae1&is=690c0961&hm=62073157c0213fbb5d4360856f17b9b9def2aa5d9fbdc91916dcaf220166699c&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .addFields(
             {name:'User',value:`<@${infraction.userId}>`},
             {name:'Original Type',value:infraction.type},
@@ -1262,7 +1262,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
           .setTitle(`Active Infractions for ${targetUser.tag}`)
           .setColor('#0C588A')
           .setThumbnail('https://images-ext-1.discordapp.net/external/-DJxTwQM1mhMeUDsepuwxHvGsuPFUL9f0AtZt8b5aK8/%3Fsize%3D512/https/cdn.discordapp.com/icons/1373422521809899542/7581a113166ac66d6f08c66fa008fbcc.png?format=webp&quality=lossless')
-          .setImage('https://media.discordapp.net/attachments/1435105704422936687/1435819787937779732/image.png?ex=690d5ae1&is=690c0961&hm=62073157c0213fbb5d4360856f17b9b9def2aa5d9fbdc91916dcaf220166699c&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .setFooter({text:'APD Management'})
           .setTimestamp();
         for(const inf of userInfractions){
@@ -1312,7 +1312,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
         const wipeEmbed = new EmbedBuilder()
           .setTitle('Infractions Wiped')
           .setColor('#0C588A')
-          .setImage('https://media.discordapp.net/attachments/1435105704422936687/1435819787937779732/image.png?ex=690d5ae1&is=690c0961&hm=62073157c0213fbb5d4360856f17b9b9def2aa5d9fbdc91916dcaf220166699c&=&format=webp&quality=lossless')
+          .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .addFields(
             {name:'User',value:`${targetUser}`,inline:true},
             {name:'Infractions Removed',value:`${infractionCount}`,inline:true},
@@ -1333,7 +1333,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
             embeds:[new EmbedBuilder()
               .setTitle('Your Infractions Have Been Wiped')
               .setColor('#0C588A')
-              .setImage('https://media.discordapp.net/attachments/1435105704422936687/1435819787937779732/image.png?ex=690d5ae1&is=690c0961&hm=62073157c0213fbb5d4360856f17b9b9def2aa5d9fbdc91916dcaf220166699c&=&format=webp&quality=lossless')
+              .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
               .setDescription(`All of your infractions (${infractionCount}) have been removed from the system.`)
               .setFooter({text:'APD Management'})
               .setTimestamp()]
@@ -3147,6 +3147,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
