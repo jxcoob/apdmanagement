@@ -1275,7 +1275,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
           embed.addFields({
             name:`${inf.id} — ${inf.type}`,
             value:`**Reason:** ${inf.reason}\n**Division:** ${inf.division||'N/A'}\n**Moderator:** <@${inf.moderator}>\n**Date:** <t:${Math.floor(new Date(inf.timestamp).getTime()/1000)}:f>\n${inf.evidence?`[Evidence](${inf.evidence})`:''}`,
-            inline:false
+            inline:true
           });
         }
         await interaction.reply({embeds:[embed], flags: MessageFlags.Ephemeral});
@@ -2545,11 +2545,11 @@ else if(cmd==='reinstate'){
         .setDescription(`**ID:** ${reportId}`)
         .setColor('#0C588A')
         .addFields(
-          {name:'Scene Location',value:sceneLocation,inline:false},
-          {name:'Callsign / Roleplay Name',value:callsign,inline:false},
-          {name:'Description',value:description,inline:false},
-          {name:'Outcome',value:outcome,inline:false},
-          {name:'Submitted By',value:`${interaction.user.tag}`,inline:false}
+          {name:'Scene Location',value:sceneLocation,inline:true},
+          {name:'Callsign / Roleplay Name',value:callsign,inline:true},
+          {name:'Description',value:description,inline:true},
+          {name:'Outcome',value:outcome,inline:true},
+          {name:'Submitted By',value:`${interaction.user.tag}`,inline:true}
         )
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:'APD Management'})
@@ -3153,6 +3153,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
