@@ -128,7 +128,13 @@ function saveDB(db) {
 
 
 function generateID(db) {
-  const ids = db.infractions.map(i => parseInt(i.id.substring(2)));
+  const ids = db.infractions
+    .map(i => {
+      const numPart = i.id.substring(2);
+      return isNaN(parseInt(numPart)) ? 0 : parseInt(numPart);
+    })
+    .filter(num => num > 0);
+  
   const maxId = ids.length > 0 ? Math.max(...ids) : 0;
   return `IF${maxId + 1}`;
 }
@@ -3147,6 +3153,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
