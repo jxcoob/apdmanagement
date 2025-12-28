@@ -1115,7 +1115,7 @@ client.on('interactionCreate', async interaction=>{
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .addFields(
             {name:'Type',value:type,inline:true},
-            {name:'Reason',value:reason},
+            {name:'Reason',value:reason,inline:true},
             {name:'Infraction ID',value:infractionId,inline:true}
           )
           .setFooter({text:'APD Management'})
@@ -1145,7 +1145,7 @@ client.on('interactionCreate', async interaction=>{
           .addFields(
             {name:'User',value:`${targetUser}`,inline:true},
             {name:'Type',value:type,inline:true},
-            {name:'Reason',value:reason},
+            {name:'Reason',value:reason,inline:true},
             {name:'Issued by:',value:`${interaction.user.tag}`,inline:true},
             {name:'Infraction ID',value:infractionId,inline:true}
           )
@@ -3153,6 +3153,7 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
+
 
 
 
