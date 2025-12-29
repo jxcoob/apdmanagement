@@ -135,9 +135,24 @@ process.on('uncaughtException', (error) => {
   process.exit(1);
 });
 
+// Add Discord client error handler
+client.on('error', (error) => {
+  console.error('❌ Discord client error:', error);
+});
+
+client.on('warn', (warning) => {
+  console.warn('⚠️  Discord client warning:', warning);
+});
+
+client.on('debug', (info) => {
+  // Uncomment for verbose debugging
+  // console.log('🐛 Debug:', info);
+});
+
 // Login
 console.log('🔐 Attempting to login...');
 client.login(token).catch(error => {
   console.error('❌ Failed to login:', error.message);
+  console.error('Full error:', error);
   process.exit(1);
 });
