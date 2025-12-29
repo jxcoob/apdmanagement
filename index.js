@@ -3,7 +3,6 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const keep_alive = require('./keep_alive.js');
 
 const token = process.env.TOKEN;
 
@@ -25,7 +24,15 @@ if (!process.env.GUILD_ID) {
   process.exit(1);
 }
 
+// Verify token format (basic check)
+if (!token.includes('.')) {
+  console.error('❌ ERROR: TOKEN appears to be invalid (should contain dots)');
+  process.exit(1);
+}
+
 console.log('✅ Environment variables loaded');
+console.log(`📝 Token length: ${token.length} characters`);
+console.log(`📝 Token starts with: ${token.substring(0, 10)}...`);
 
 // Create client
 const client = new Client({
@@ -123,7 +130,7 @@ for (const file of eventFiles) {
 // Express server for keep-alive
 const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
-app.listen(3000, () => console.log('Web server running on port 3000'));
+const server = app.listen(3000, () => console.log('Web server running on port 3000'));
 
 // Add global error handlers
 process.on('unhandledRejection', (error) => {
@@ -145,14 +152,53 @@ client.on('warn', (warning) => {
 });
 
 client.on('debug', (info) => {
-  // Uncomment for verbose debugging
-  // console.log('🐛 Debug:', info);
+  // Log connection-related debug info
+  if (info.includes('Session') || info.includes('Heartbeat') || info.includes('connect')) {
+    console.log('🐛 Debug:', info);
+  }
 });
 
-// Login
+// Add shardError handler
+client.on('shardError', error => {
+  console.error('❌ A websocket connection encountered an error:', error);
+});
+
+// Login with detailed error catching
 console.log('🔐 Attempting to login...');
-client.login(token).catch(error => {
-  console.error('❌ Failed to login:', error.message);
-  console.error('Full error:', error);
-  process.exit(1);
+console.log('⏳ Connecting to Discord Gateway...');
+
+client.login(token)
+  .then(() => {
+    console.log('✅ Login method completed successfully');
+  })
+  .catch(error => {
+    console.error('❌ Failed to login!');
+    console.error('Error type:', error.constructor.name);
+    console.error('Error message:', error.message);
+    console.error('Error code:', error.code);
+    console.error('Full error:', error);
+    
+    // Common error codes and solutions
+    if (error.code === 'TOKEN_INVALID') {
+      console.error('\n💡 Solution: Your bot token is invalid. Please:');
+      console.error('   1. Go to https://discord.com/developers/applications');
+      console.error('   2. Select your bot');
+      console.error('   3. Go to "Bot" section');
+      console.error('   4. Click "Reset Token" and copy the new token');
+      console.error('   5. Update your TOKEN in the .env file');
+    } else if (error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
+      console.error('\n💡 Solution: Network connection issue. Check your internet connection.');
+    }
+    
+    process.exit(1);
+  });
+
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('📴 SIGTERM received, shutting down gracefully...');
+  server.close(() => {
+    console.log('🔌 HTTP server closed');
+    client.destroy();
+    process.exit(0);
+  });
 });
