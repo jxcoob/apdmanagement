@@ -1115,7 +1115,7 @@ client.on('interactionCreate', async interaction=>{
           .setImage('https://media.discordapp.net/attachments/1413339969174503446/1449385795893985480/IMG_1627.png?ex=69415836&is=694006b6&hm=1011af88190e4774299271f59edbd5807d7306ce20ecaa3cb533f5009afbec6a&=&format=webp&quality=lossless')
           .addFields(
             {name:'Type',value:type,inline:true},
-            {name:'Reason',value:reason,inline:true},
+            {name:'Reason',value:reason},
             {name:'Infraction ID',value:infractionId,inline:true}
           )
           .setFooter({text:'APD Management'})
@@ -1145,7 +1145,7 @@ client.on('interactionCreate', async interaction=>{
           .addFields(
             {name:'User',value:`${targetUser}`,inline:true},
             {name:'Type',value:type,inline:true},
-            {name:'Reason',value:reason,inline:true},
+            {name:'Reason',value:reason},
             {name:'Issued by:',value:`${interaction.user.tag}`,inline:true},
             {name:'Infraction ID',value:infractionId,inline:true}
           )
@@ -1275,7 +1275,7 @@ const logChannel = await interaction.client.channels.fetch(logChannelId);
           embed.addFields({
             name:`${inf.id} — ${inf.type}`,
             value:`**Reason:** ${inf.reason}\n**Division:** ${inf.division||'N/A'}\n**Moderator:** <@${inf.moderator}>\n**Date:** <t:${Math.floor(new Date(inf.timestamp).getTime()/1000)}:f>\n${inf.evidence?`[Evidence](${inf.evidence})`:''}`,
-            inline:true
+            inline:false
           });
         }
         await interaction.reply({embeds:[embed], flags: MessageFlags.Ephemeral});
@@ -2545,11 +2545,11 @@ else if(cmd==='reinstate'){
         .setDescription(`**ID:** ${reportId}`)
         .setColor('#0C588A')
         .addFields(
-          {name:'Scene Location',value:sceneLocation,inline:true},
-          {name:'Callsign / Roleplay Name',value:callsign,inline:true},
-          {name:'Description',value:description,inline:true},
-          {name:'Outcome',value:outcome,inline:true},
-          {name:'Submitted By',value:`${interaction.user.tag}`,inline:true}
+          {name:'Scene Location',value:sceneLocation,inline:false},
+          {name:'Callsign / Roleplay Name',value:callsign,inline:false},
+          {name:'Description',value:description,inline:false},
+          {name:'Outcome',value:outcome,inline:false},
+          {name:'Submitted By',value:`${interaction.user.tag}`,inline:false}
         )
         .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d98449ee280d08d159eb4891&=&format=webp&quality=lossless')
         .setFooter({text:'APD Management'})
@@ -3153,9 +3153,6 @@ app.listen(3000,()=>console.log('Web server running on port 3000'));
 
 
 client.login(token);
-
-
-
 
 
 
