@@ -24,24 +24,22 @@ if (!process.env.GUILD_ID) {
   process.exit(1);
 }
 
-// Verify token format (basic check)
-if (!token.includes('.')) {
-  console.error('❌ ERROR: TOKEN appears to be invalid (should contain dots)');
-  process.exit(1);
-}
-
 console.log('✅ Environment variables loaded');
-console.log(`📝 Token length: ${token.length} characters`);
-console.log(`📝 Token starts with: ${token.substring(0, 10)}...`);
 
-// Create client
+// Create client with WS options for better connectivity
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMessages,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.GuildMembers
-  ]
+  ],
+  ws: {
+    large_threshold: 50
+  },
+  rest: {
+    timeout: 30000
+  }
 });
 
 // Initialize command collections
@@ -51,10 +49,8 @@ client.prefixCommands = new Collection();
 // Load slash commands
 const commandsPath = path.join(__dirname, 'commands');
 
-// Check if commands directory exists
 if (!fs.existsSync(commandsPath)) {
   console.error('❌ ERROR: commands/ directory not found!');
-  console.error('Please create the commands/ directory and add command files.');
   process.exit(1);
 }
 
@@ -101,10 +97,8 @@ if (fs.existsSync(prefixCommandsPath)) {
 // Load event handlers
 const eventsPath = path.join(__dirname, 'events');
 
-// Check if events directory exists
 if (!fs.existsSync(eventsPath)) {
   console.error('❌ ERROR: events/ directory not found!');
-  console.error('Please create the events/ directory and add event files.');
   process.exit(1);
 }
 
@@ -130,72 +124,111 @@ for (const file of eventFiles) {
 // Express server for keep-alive
 const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
-const server = app.listen(3000, () => console.log('Web server running on port 3000'));
-
-// Add global error handlers
-process.on('unhandledRejection', (error) => {
-  console.error('❌ Unhandled promise rejection:', error);
+app.get('/status', (req, res) => {
+  res.json({
+    status: client.isReady() ? 'online' : 'connecting',
+    uptime: client.uptime,
+    guilds: client.guilds.cache.size
+  });
 });
+const server = app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
 
-process.on('uncaughtException', (error) => {
-  console.error('❌ Uncaught exception:', error);
-  process.exit(1);
-});
+// FULL DEBUG LOGGING - Every Discord.js event
+console.log('📊 Setting up comprehensive event logging...');
 
-// Add Discord client error handler
-client.on('error', (error) => {
-  console.error('❌ Discord client error:', error);
+client.on('debug', (info) => {
+  console.log('🐛 [DEBUG]:', info);
 });
 
 client.on('warn', (warning) => {
-  console.warn('⚠️  Discord client warning:', warning);
+  console.warn('⚠️  [WARN]:', warning);
 });
 
-client.on('debug', (info) => {
-  // Log connection-related debug info
-  if (info.includes('Session') || info.includes('Heartbeat') || info.includes('connect')) {
-    console.log('🐛 Debug:', info);
-  }
+client.on('error', (error) => {
+  console.error('❌ [ERROR]:', error);
 });
 
-// Add shardError handler
 client.on('shardError', error => {
-  console.error('❌ A websocket connection encountered an error:', error);
+  console.error('❌ [SHARD ERROR]:', error);
 });
 
-// Login with detailed error catching
+client.on('shardReady', (id) => {
+  console.log(`✅ [SHARD ${id}] Ready!`);
+});
+
+client.on('shardDisconnect', (event, id) => {
+  console.log(`🔌 [SHARD ${id}] Disconnected:`, event);
+});
+
+client.on('shardReconnecting', (id) => {
+  console.log(`🔄 [SHARD ${id}] Reconnecting...`);
+});
+
+client.on('shardResume', (id) => {
+  console.log(`▶️  [SHARD ${id}] Resumed!`);
+});
+
+// Add global error handlers
+process.on('unhandledRejection', (error) => {
+  console.error('❌ [UNHANDLED REJECTION]:', error);
+  if (error.stack) console.error(error.stack);
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('❌ [UNCAUGHT EXCEPTION]:', error);
+  if (error.stack) console.error(error.stack);
+  process.exit(1);
+});
+
+// Login with timeout detection
 console.log('🔐 Attempting to login...');
 console.log('⏳ Connecting to Discord Gateway...');
 
+// Set a timeout to detect stuck connections
+const loginTimeout = setTimeout(() => {
+  console.error('❌ LOGIN TIMEOUT: Bot has been trying to connect for 30 seconds');
+  console.error('💡 This usually means:');
+  console.error('   1. Network/firewall is blocking WebSocket connections');
+  console.error('   2. Discord API is experiencing issues');
+  console.error('   3. Your token might be invalid');
+  console.error('');
+  console.error('🔍 Checking token validity...');
+  console.error(`   Token format appears valid (${token.length} chars)`);
+  console.error('');
+  console.error('🌐 Try testing your token manually at:');
+  console.error('   https://discord.com/api/v10/users/@me');
+  console.error('   (Use Authorization: Bot YOUR_TOKEN_HERE)');
+}, 30000);
+
 client.login(token)
   .then(() => {
-    console.log('✅ Login method completed successfully');
+    clearTimeout(loginTimeout);
+    console.log('✅ Login promise resolved');
   })
   .catch(error => {
-    console.error('❌ Failed to login!');
-    console.error('Error type:', error.constructor.name);
+    clearTimeout(loginTimeout);
+    console.error('❌ LOGIN FAILED!');
+    console.error('Error name:', error.name);
     console.error('Error message:', error.message);
     console.error('Error code:', error.code);
-    console.error('Full error:', error);
     
-    // Common error codes and solutions
     if (error.code === 'TOKEN_INVALID') {
-      console.error('\n💡 Solution: Your bot token is invalid. Please:');
-      console.error('   1. Go to https://discord.com/developers/applications');
-      console.error('   2. Select your bot');
-      console.error('   3. Go to "Bot" section');
-      console.error('   4. Click "Reset Token" and copy the new token');
-      console.error('   5. Update your TOKEN in the .env file');
-    } else if (error.code === 'ENOTFOUND' || error.code === 'ETIMEDOUT') {
-      console.error('\n💡 Solution: Network connection issue. Check your internet connection.');
+      console.error('\n💡 Your token is invalid or expired!');
+      console.error('   Go to: https://discord.com/developers/applications');
+      console.error('   Reset your bot token and update your .env file');
+    } else if (error.message?.includes('ECONNREFUSED') || error.message?.includes('ENOTFOUND')) {
+      console.error('\n💡 Cannot reach Discord servers!');
+      console.error('   Check your network connection and firewall settings');
     }
     
+    console.error('\nFull error:', error);
     process.exit(1);
   });
 
 // Graceful shutdown
 process.on('SIGTERM', () => {
   console.log('📴 SIGTERM received, shutting down gracefully...');
+  clearTimeout(loginTimeout);
   server.close(() => {
     console.log('🔌 HTTP server closed');
     client.destroy();
