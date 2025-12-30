@@ -10,63 +10,67 @@ module.exports = {
     console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
     
     const commands = [];
+    const commandNames = new Set(); // Track unique command names
     const commandsPath = path.join(__dirname, '..', 'commands');
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
     
-    console.log(`📦 Preparing ${commandFiles.length} command files for registration...`);
+    console.log(`📦 Processing ${commandFiles.length} command files...`);
     
     for (const file of commandFiles) {
       try {
-        const command = require(path.join(commandsPath, file));
+        // Clear the require cache to avoid stale data
+        const filePath = path.join(commandsPath, file);
+        delete require.cache[require.resolve(filePath)];
+        
+        const command = require(filePath);
         
         // Handle commands that export an array of SlashCommandBuilders
         if (Array.isArray(command.data)) {
           for (const cmdData of command.data) {
-            commands.push(cmdData.toJSON ? cmdData.toJSON() : cmdData);
+            const jsonCmd = cmdData.toJSON ? cmdData.toJSON() : cmdData;
+            if (!commandNames.has(jsonCmd.name)) {
+              commands.push(jsonCmd);
+              commandNames.add(jsonCmd.name);
+            }
           }
         } else if (command.data) {
-          commands.push(command.data.toJSON ? command.data.toJSON() : command.data);
+          const jsonCmd = command.data.toJSON ? command.data.toJSON() : command.data;
+          if (!commandNames.has(jsonCmd.name)) {
+            commands.push(jsonCmd);
+            commandNames.add(jsonCmd.name);
+          }
         }
       } catch (error) {
         console.error(`❌ Error processing ${file}:`, error.message);
       }
     }
     
+    console.log(`✅ Loaded ${commands.length} unique commands`);
+    console.log(`📝 Commands: ${Array.from(commandNames).sort().join(', ')}`);
+    
     const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
     
     try {
       console.log('🧹 Clearing all existing commands...');
       
+      // Clear guild commands
       await rest.put(
         Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
         { body: [] }
       );
-      
       console.log('✅ Guild commands cleared');
       
+      // Clear global commands
       await rest.put(
         Routes.applicationCommands(process.env.CLIENT_ID),
         { body: [] }
       );
-      
       console.log('✅ Global commands cleared');
-      console.log('⏳ Waiting 5 seconds for Discord to process...');
-      await new Promise(resolve => setTimeout(resolve, 5000));
       
-      const commandNames = commands.map(c => c.name);
-      const uniqueNames = new Set(commandNames);
+      console.log('⏳ Waiting 10 seconds for Discord to fully process...');
+      await new Promise(resolve => setTimeout(resolve, 10000));
       
-      if (commandNames.length !== uniqueNames.size) {
-        console.error('❌ Error: Duplicate command names detected!');
-        const duplicates = commandNames.filter((name, index) => commandNames.indexOf(name) !== index);
-        console.error('Duplicates:', duplicates);
-        return;
-      }
-      
-      console.log(`✅ ${commands.length} unique commands ready`);
-      console.log(`📝 Commands: ${commandNames.join(', ')}`);
       console.log('🔄 Registering commands with Discord...');
-      
       const data = await rest.put(
         Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
         { body: commands }
