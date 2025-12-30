@@ -67,10 +67,18 @@ module.exports = {
       await new Promise(resolve => setTimeout(resolve, 10000));
       
       console.log('🔄 Registering commands with Discord...');
-      const data = await rest.put(
+      
+      // Add timeout to prevent hanging
+      const registrationPromise = rest.put(
         Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
         { body: commands }
       );
+      
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Registration timeout after 30 seconds')), 30000)
+      );
+      
+      const data = await Promise.race([registrationPromise, timeoutPromise]);
       
       console.log(`✅ Successfully registered ${data.length} commands!`);
       console.log(`📋 Registered commands: ${data.map(c => c.name).join(', ')}`);
@@ -78,11 +86,24 @@ module.exports = {
       console.log(`\n💡 Try typing / in your Discord server to see commands!`);
       
     } catch (err) {
-      console.error('❌ Error registering commands:');
+      console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
       console.error('Error name:', err.name);
       console.error('Error message:', err.message);
-      if (err.code) console.error('Error code:', err.code);
-      if (err.rawError) console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
+      console.error('Error code:', err.code);
+      console.error('Error status:', err.status);
+      
+      if (err.rawError) {
+        console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
+      }
+      
+      if (err.stack) {
+        console.error('Stack trace:', err.stack);
+      }
+      
+      console.error('\n🔧 POSSIBLE FIXES:');
+      console.error('1. Check CLIENT_ID and GUILD_ID in Render environment variables');
+      console.error('2. Re-invite bot: https://discord.com/api/oauth2/authorize?client_id=' + process.env.CLIENT_ID + '&permissions=8&scope=bot%20applications.commands');
+      console.error('3. Make sure bot has "applications.commands" scope');
     }
   }
 };
