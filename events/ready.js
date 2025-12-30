@@ -13,13 +13,19 @@ module.exports = {
     const commandsPath = path.join(__dirname, '..', 'commands');
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
     
-    console.log(`📦 Preparing ${commandFiles.length} commands for registration...`);
+    console.log(`📦 Preparing ${commandFiles.length} command files for registration...`);
     
     for (const file of commandFiles) {
       try {
         const command = require(path.join(commandsPath, file));
-        if (command.data) {
-          commands.push(command.data.toJSON());
+        
+        // Handle commands that export an array of SlashCommandBuilders
+        if (Array.isArray(command.data)) {
+          for (const cmdData of command.data) {
+            commands.push(cmdData.toJSON ? cmdData.toJSON() : cmdData);
+          }
+        } else if (command.data) {
+          commands.push(command.data.toJSON ? command.data.toJSON() : command.data);
         }
       } catch (error) {
         console.error(`❌ Error processing ${file}:`, error.message);
@@ -44,8 +50,8 @@ module.exports = {
       );
       
       console.log('✅ Global commands cleared');
-      console.log('⏳ Waiting 2 seconds for Discord to process...');
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('⏳ Waiting 5 seconds for Discord to process...');
+      await new Promise(resolve => setTimeout(resolve, 5000));
       
       const commandNames = commands.map(c => c.name);
       const uniqueNames = new Set(commandNames);
@@ -58,7 +64,7 @@ module.exports = {
       }
       
       console.log(`✅ ${commands.length} unique commands ready`);
-      console.log('📝 Commands:', commandNames.join(', '));
+      console.log(`📝 Commands: ${commandNames.join(', ')}`);
       console.log('🔄 Registering commands with Discord...');
       
       const data = await rest.put(
