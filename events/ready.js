@@ -10,7 +10,7 @@ module.exports = {
     console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
     
     const commands = [];
-    const commandNames = new Set(); // Track unique command names
+    const commandNames = new Set();
     const commandsPath = path.join(__dirname, '..', 'commands');
     const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
     
@@ -18,13 +18,11 @@ module.exports = {
     
     for (const file of commandFiles) {
       try {
-        // Clear the require cache to avoid stale data
         const filePath = path.join(commandsPath, file);
         delete require.cache[require.resolve(filePath)];
         
         const command = require(filePath);
         
-        // Handle commands that export an array of SlashCommandBuilders
         if (Array.isArray(command.data)) {
           for (const cmdData of command.data) {
             const jsonCmd = cmdData.toJSON ? cmdData.toJSON() : cmdData;
@@ -53,14 +51,12 @@ module.exports = {
     try {
       console.log('🧹 Clearing all existing commands...');
       
-      // Clear guild commands
       await rest.put(
         Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
         { body: [] }
       );
       console.log('✅ Guild commands cleared');
       
-      // Clear global commands
       await rest.put(
         Routes.applicationCommands(process.env.CLIENT_ID),
         { body: [] }
@@ -77,14 +73,16 @@ module.exports = {
       );
       
       console.log(`✅ Successfully registered ${data.length} commands!`);
+      console.log(`📋 Registered commands: ${data.map(c => c.name).join(', ')}`);
       console.log('🎉 Bot is ready to use!');
+      console.log(`\n💡 Try typing / in your Discord server to see commands!`);
       
     } catch (err) {
       console.error('❌ Error registering commands:');
       console.error('Error name:', err.name);
       console.error('Error message:', err.message);
       if (err.code) console.error('Error code:', err.code);
-      if (err.stack) console.error('Stack trace:', err.stack);
+      if (err.rawError) console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
     }
   }
 };
