@@ -6,9 +6,6 @@ const express = require('express');
 const keep_alive = require('./keep_alive.js');
 
 const token = process.env.TOKEN;
-const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID;
-
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -25,7 +22,7 @@ const commandNames = new Set();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-console.log(`📦 Processing ${commandFiles.length} command files...`);
+console.log(`📦 Loading ${commandFiles.length} command files...`);
 
 for (const file of commandFiles) {
   try {
@@ -55,7 +52,6 @@ for (const file of commandFiles) {
 }
 
 console.log(`✅ Loaded ${commands.length} unique commands`);
-console.log(`📝 Commands: ${Array.from(commandNames).sort().join(', ')}`);
 
 // Load event handlers
 const eventsPath = path.join(__dirname, 'events');
@@ -71,60 +67,39 @@ for (const file of eventFiles) {
   }
 }
 
-// Ready event - register commands here
-client.once('ready', async () => {
-  console.log(`✅ Logged in as ${client.user.tag}`);
-  console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
-  
+// Only register commands if DEPLOY_COMMANDS env variable is set to "true"
+async function registerCommands() {
+  // Skip registration unless explicitly told to deploy
+  if (process.env.DEPLOY_COMMANDS !== 'true') {
+    console.log('⏭️  Skipping command registration (DEPLOY_COMMANDS not set to true)');
+    return;
+  }
+
   const rest = new REST({ version: '10' }).setToken(token);
   
   try {
-    console.log('🧹 Clearing all existing commands...');
-    
-    // Clear guild commands
-    await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
-    
-    // Clear global commands (optional, but good practice)
-    await rest.put(Routes.applicationCommands(clientId), { body: [] });
-    
-    console.log('⏳ Waiting 2 seconds for Discord to process...');
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Check for duplicate command names
-    const commandNamesArray = commands.map(c => c.name);
-    const uniqueNames = new Set(commandNamesArray);
-    
-    if (commandNamesArray.length !== uniqueNames.size) {
-      console.error('❌ Error: Duplicate command names detected!');
-      const duplicates = commandNamesArray.filter((name, index) => commandNamesArray.indexOf(name) !== index);
-      console.error('Duplicates:', duplicates);
-      return;
-    }
-    
-    console.log(`🔄 Registering ${commands.length} unique commands...`);
-    console.log(`📋 Commands: ${commandNamesArray.join(', ')}`);
+    console.log('🔄 Registering commands with Discord...');
     
     const data = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId), 
+      Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
       { body: commands }
     );
     
     console.log(`✅ Successfully registered ${data.length} commands!`);
     console.log(`📋 Active commands: ${data.map(c => c.name).join(', ')}`);
-    console.log('🎉 Bot is ready to use!');
-    console.log('\n💡 Type / in your Discord server to see all commands!');
     
   } catch (err) {
     console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
-    console.error('Error name:', err.name);
-    console.error('Error message:', err.message);
-    console.error('Error code:', err.code);
-    console.error('Error status:', err.status);
-    
-    if (err.rawError) {
-      console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
-    }
+    console.error('Error:', err.message);
+    if (err.code) console.error('Code:', err.code);
+    if (err.status) console.error('Status:', err.status);
   }
+}
+
+client.once('ready', () => {
+  console.log(`✅ Logged in as ${client.user.tag}`);
+  console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
+  console.log('🎉 Bot is ready!');
 });
 
 // Express server
@@ -132,5 +107,7 @@ const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
 app.listen(3000, () => console.log('Web server running on port 3000'));
 
-// Login
-client.login(token);
+// Register commands, then login
+registerCommands().then(() => {
+  client.login(token);
+});
