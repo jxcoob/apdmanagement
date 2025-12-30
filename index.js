@@ -22,6 +22,7 @@ const client = new Client({
 
 // ====== LOAD COMMANDS ======
 client.commands = new Map();
+client.prefixCommands = new Map(); // For prefix commands if needed
 const commands = [];
 const commandNames = new Set();
 const commandsPath = path.join(__dirname, 'commands');
@@ -77,6 +78,8 @@ if (fs.existsSync(eventsPath)) {
       } else {
         client.on(event.name, (...args) => event.execute(...args, client));
       }
+      
+      console.log(`  ✓ Loaded event: ${event.name}`);
     } catch (error) {
       console.error(`❌ Error loading event ${file}:`, error.message);
     }
@@ -89,24 +92,26 @@ if (fs.existsSync(eventsPath)) {
 
 // ====== READY EVENT & COMMAND REGISTRATION ======
 client.once('ready', async () => {
-  console.log('🎯 READY EVENT FIRED!');
+  console.log('\n🎯 ========== READY EVENT FIRED ==========');
   console.log(`✅ Logged in as ${client.user.tag}`);
   console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
+  console.log(`🆔 Client ID: ${clientId}`);
+  console.log(`🏠 Guild ID: ${guildId}`);
   
   const rest = new REST({ version: '10' }).setToken(token);
   
   try {
-    console.log('🧹 Clearing all existing commands...');
+    console.log('\n🧹 Clearing all existing commands...');
     
     // Clear guild commands
     await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
-    console.log('✓ Guild commands cleared');
+    console.log('  ✓ Guild commands cleared');
     
     // Clear global commands
     await rest.put(Routes.applicationCommands(clientId), { body: [] });
-    console.log('✓ Global commands cleared');
+    console.log('  ✓ Global commands cleared');
     
-    console.log('⏳ Waiting 2 seconds for Discord to process...');
+    console.log('\n⏳ Waiting 2 seconds for Discord to process...');
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     // Check for duplicate command names
@@ -120,18 +125,18 @@ client.once('ready', async () => {
       return;
     }
     
-    console.log(`🔄 Registering ${commands.length} commands with Discord...`);
-    console.log(`📋 Command names: ${commandNamesArray.join(', ')}`);
+    console.log(`\n🔄 Registering ${commands.length} commands with Discord...`);
+    console.log(`📋 Command list: ${commandNamesArray.join(', ')}`);
     
     const data = await rest.put(
       Routes.applicationGuildCommands(clientId, guildId), 
       { body: commands }
     );
     
-    console.log(`✅ Successfully registered ${data.length} commands!`);
+    console.log(`\n✅ Successfully registered ${data.length} commands!`);
     console.log(`📋 Active commands: ${data.map(c => c.name).join(', ')}`);
-    console.log('🎉 Bot is ready to use!');
-    console.log('\n💡 Type / in your Discord server to see all commands!');
+    console.log('\n🎉 ========== BOT READY TO USE ==========');
+    console.log('💡 Type / in your Discord server to see all commands!\n');
     
   } catch (err) {
     console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
@@ -149,59 +154,6 @@ client.once('ready', async () => {
     console.error('2. Verify GUILD_ID:', guildId);
     console.error('3. Check bot is in the server');
     console.error(`4. Re-invite bot: https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands`);
-  }
-});
-
-// Add a backup listener to see if ready fires at all
-client.on('ready', () => {
-  console.log('⚠️ Secondary ready listener fired (this should not happen if once() worked)');
-});
-
-// ====== PREFIX COMMANDS ======
-client.on('messageCreate', async message => {
-  if (message.author.bot || !message.guild) return;
-
-  if (message.content.startsWith('$say')) {
-    const allowedSayRoles = ['1405655436585205846', '1405655436597661720'];
-    if (!message.member.roles.cache.some(r => allowedSayRoles.includes(r.id))) {
-      return message.reply('You do not have permission.');
-    }
-
-    const text = message.content.slice(4).trim();
-    if (!text) return message.reply('Please provide text.');
-
-    await message.delete().catch(console.error);
-    await message.channel.send(text);
-  }
-});
-
-// ====== EXPRESS SERVER ======
-const app = express();
-app.get('/', (req, res) => res.send('Bot is alive!'));
-app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
-
-// ====== LOGIN ======
-console.log('🔐 Logging in to Discord...');
-client.login(token).catch(err => {
-  console.error('❌ Failed to login:', err);
-  process.exit(1);
-});
-
-// ====== PREFIX COMMANDS ======
-client.on('messageCreate', async message => {
-  if (message.author.bot || !message.guild) return;
-
-  if (message.content.startsWith('$say')) {
-    const allowedSayRoles = ['1405655436585205846', '1405655436597661720'];
-    if (!message.member.roles.cache.some(r => allowedSayRoles.includes(r.id))) {
-      return message.reply('You do not have permission.');
-    }
-
-    const text = message.content.slice(4).trim();
-    if (!text) return message.reply('Please provide text.');
-
-    await message.delete().catch(console.error);
-    await message.channel.send(text);
   }
 });
 
