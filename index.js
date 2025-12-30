@@ -67,43 +67,48 @@ for (const file of eventFiles) {
   }
 }
 
-// Register commands function with detailed error logging
+// Register commands with timeout
 async function registerCommands() {
-  console.log('🔄 Registering commands with Discord...');
+  console.log('🔄 Starting command registration...');
   console.log(`📋 CLIENT_ID: ${process.env.CLIENT_ID}`);
   console.log(`📋 GUILD_ID: ${process.env.GUILD_ID}`);
   console.log(`📋 Commands to register: ${commands.length}`);
   
   const rest = new REST({ version: '10' }).setToken(token);
   
+  // Create a timeout promise
+  const timeoutPromise = new Promise((_, reject) => {
+    setTimeout(() => reject(new Error('Command registration timed out after 10 seconds')), 10000);
+  });
+  
+  // Race between the actual registration and timeout
   try {
-    const data = await rest.put(
+    const registrationPromise = rest.put(
       Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
       { body: commands }
     );
     
+    const data = await Promise.race([registrationPromise, timeoutPromise]);
+    
     console.log(`✅ Successfully registered ${data.length} commands!`);
     console.log(`📋 Registered commands: ${data.map(c => c.name).join(', ')}`);
+    return true;
     
   } catch (err) {
-    console.error('\n🚨🚨🚨 COMMAND REGISTRATION FAILED 🚨🚨🚨');
-    console.error('Error name:', err.name);
+    console.error('\n🚨 COMMAND REGISTRATION FAILED 🚨');
     console.error('Error message:', err.message);
-    console.error('Error code:', err.code);
-    console.error('Error status:', err.status);
-    console.error('Full error:', err);
+    console.error('Error name:', err.name);
+    
+    if (err.code) console.error('Error code:', err.code);
+    if (err.status) console.error('HTTP status:', err.status);
+    if (err.stack) console.error('Stack:', err.stack);
     
     if (err.rawError) {
-      console.error('Raw error details:', JSON.stringify(err.rawError, null, 2));
+      console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
     }
     
-    // Log environment variables (safely)
-    console.error('\n🔍 Environment Check:');
-    console.error('CLIENT_ID exists:', !!process.env.CLIENT_ID);
-    console.error('GUILD_ID exists:', !!process.env.GUILD_ID);
-    console.error('TOKEN exists:', !!process.env.TOKEN);
-    console.error('CLIENT_ID value:', process.env.CLIENT_ID);
-    console.error('GUILD_ID value:', process.env.GUILD_ID);
+    console.error('\n⚠️  Bot will continue without registering commands');
+    return false;
   }
 }
 
@@ -118,13 +123,19 @@ const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
 app.listen(3000, () => console.log('Web server running on port 3000'));
 
-// Register commands THEN login
+// Start bot login immediately, register commands in parallel
+console.log('🚀 Starting bot login...');
+client.login(token);
+
+// Register commands in the background (don't block bot login)
 registerCommands()
-  .then(() => {
-    console.log('✅ Command registration complete, logging in...');
-    return client.login(token);
+  .then(success => {
+    if (success) {
+      console.log('✅ Command registration completed successfully');
+    } else {
+      console.log('⚠️  Command registration failed, but bot is still running');
+    }
   })
   .catch(err => {
-    console.error('❌ Fatal error during startup:', err);
-    process.exit(1);
+    console.error('❌ Unexpected error in command registration:', err);
   });
