@@ -22,13 +22,14 @@ const commandNames = new Set();
 const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-console.log(`📦 Loading ${commandFiles.length} command files...`);
+console.log(`📦 Processing ${commandFiles.length} command files...`);
 
 for (const file of commandFiles) {
   try {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
     
+    // Handle commands that export an array of SlashCommandBuilders
     if (Array.isArray(command.data)) {
       for (const cmdData of command.data) {
         client.commands.set(cmdData.name, command);
@@ -52,6 +53,7 @@ for (const file of commandFiles) {
 }
 
 console.log(`✅ Loaded ${commands.length} unique commands`);
+console.log(`📝 Commands: ${Array.from(commandNames).sort().join(', ')}`);
 
 // Load event handlers
 const eventsPath = path.join(__dirname, 'events');
@@ -67,18 +69,12 @@ for (const file of eventFiles) {
   }
 }
 
-// Only register commands if DEPLOY_COMMANDS env variable is set to "true"
+// Register commands with Discord
 async function registerCommands() {
-  // Skip registration unless explicitly told to deploy
-  if (process.env.DEPLOY_COMMANDS !== 'true') {
-    console.log('⏭️  Skipping command registration (DEPLOY_COMMANDS not set to true)');
-    return;
-  }
-
   const rest = new REST({ version: '10' }).setToken(token);
   
   try {
-    console.log('🔄 Registering commands with Discord...');
+    console.log('🔄 Registering/updating commands with Discord...');
     
     const data = await rest.put(
       Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
@@ -87,27 +83,46 @@ async function registerCommands() {
     
     console.log(`✅ Successfully registered ${data.length} commands!`);
     console.log(`📋 Active commands: ${data.map(c => c.name).join(', ')}`);
+    console.log('🎉 Commands registered successfully!');
     
   } catch (err) {
     console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
-    console.error('Error:', err.message);
-    if (err.code) console.error('Code:', err.code);
-    if (err.status) console.error('Status:', err.status);
+    console.error('Error name:', err.name);
+    console.error('Error message:', err.message);
+    console.error('Error code:', err.code);
+    console.error('Error status:', err.status);
+    
+    if (err.rawError) {
+      console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
+    }
+    
+    if (err.requestBody) {
+      console.error('Request body:', JSON.stringify(err.requestBody, null, 2));
+    }
+    
+    console.error('\n🔧 POSSIBLE FIXES:');
+    console.error('1. Verify CLIENT_ID in Render: ' + process.env.CLIENT_ID);
+    console.error('2. Verify GUILD_ID in Render: ' + process.env.GUILD_ID);
+    console.error('3. Re-invite bot with this URL:');
+    console.error(`   https://discord.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=8&scope=bot%20applications.commands`);
+    console.error('4. Make sure bot is actually IN the server with GUILD_ID: ' + process.env.GUILD_ID);
   }
 }
 
+// Register commands before logging in
+registerCommands().then(() => {
+  // Express server
+  const app = express();
+  app.get('/', (req, res) => res.send('Bot is alive!'));
+  app.listen(3000, () => console.log('Web server running on port 3000'));
+  
+  // Login to Discord
+  client.login(token);
+});
+
+// Add a ready event listener for status updates
 client.once('ready', () => {
   console.log(`✅ Logged in as ${client.user.tag}`);
   console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
-  console.log('🎉 Bot is ready!');
-});
-
-// Express server
-const app = express();
-app.get('/', (req, res) => res.send('Bot is alive!'));
-app.listen(3000, () => console.log('Web server running on port 3000'));
-
-// Register commands, then login
-registerCommands().then(() => {
-  client.login(token);
+  console.log('\n💡 Type / in your Discord server to see all commands!');
 });
