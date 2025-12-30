@@ -162,9 +162,50 @@ const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
 app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
 
+// ====== ERROR HANDLERS ======
+client.on('error', error => {
+  console.error('❌ Client error:', error);
+});
+
+client.on('warn', info => {
+  console.warn('⚠️ Client warning:', info);
+});
+
+client.on('debug', info => {
+  // Uncomment for verbose debugging
+  // console.log('🔍 Debug:', info);
+});
+
 // ====== LOGIN ======
 console.log('🔐 Logging in to Discord...');
-client.login(token).catch(err => {
-  console.error('❌ Failed to login:', err);
-  process.exit(1);
+console.log('🔑 Token exists:', !!token);
+console.log('🔑 Token length:', token ? token.length : 0);
+console.log('🔑 Token starts with:', token ? token.substring(0, 20) + '...' : 'NO TOKEN');
+
+// Set a timeout to check if ready event fires
+const readyTimeout = setTimeout(() => {
+  console.error('\n⏰ TIMEOUT: Ready event did not fire after 30 seconds');
+  console.error('This usually means:');
+  console.error('1. Invalid TOKEN in environment variables');
+  console.error('2. Bot token was regenerated in Discord Developer Portal');
+  console.error('3. Network/firewall issues on Render');
+  console.error('4. Discord API is down');
+  console.error('\nBot will keep trying to connect...');
+}, 30000);
+
+client.login(token)
+  .then(() => {
+    console.log('✅ Login function completed, waiting for ready event...');
+  })
+  .catch(err => {
+    clearTimeout(readyTimeout);
+    console.error('❌ Failed to login:', err);
+    console.error('❌ Error details:', err.message);
+    console.error('❌ Check your TOKEN in Render environment variables');
+    process.exit(1);
+  });
+
+// Clear timeout when ready fires
+client.once('ready', () => {
+  clearTimeout(readyTimeout);
 });
