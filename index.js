@@ -27,8 +27,17 @@ const commands = [];
 for (const file of commandFiles) {
   const filePath = path.join(commandsPath, file);
   const command = require(filePath);
-  client.commands.set(command.data.name, command);
-  commands.push(command.data);
+  
+  // Handle commands that export an array of SlashCommandBuilders
+  if (Array.isArray(command.data)) {
+    for (const cmdData of command.data) {
+      client.commands.set(cmdData.name, command);
+      commands.push(cmdData);
+    }
+  } else {
+    client.commands.set(command.data.name, command);
+    commands.push(command.data);
+  }
 }
 
 // Load event handlers
