@@ -67,32 +67,43 @@ for (const file of eventFiles) {
   }
 }
 
-// Only register commands if DEPLOY_COMMANDS env variable is set to "true"
+// Register commands function with detailed error logging
 async function registerCommands() {
-  // Skip registration unless explicitly told to deploy
-  if (process.env.DEPLOY_COMMANDS !== 'true') {
-    console.log('⏭️  Skipping command registration (DEPLOY_COMMANDS not set to true)');
-    return;
-  }
-
+  console.log('🔄 Registering commands with Discord...');
+  console.log(`📋 CLIENT_ID: ${process.env.CLIENT_ID}`);
+  console.log(`📋 GUILD_ID: ${process.env.GUILD_ID}`);
+  console.log(`📋 Commands to register: ${commands.length}`);
+  
   const rest = new REST({ version: '10' }).setToken(token);
   
   try {
-    console.log('🔄 Registering commands with Discord...');
-    
     const data = await rest.put(
       Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
       { body: commands }
     );
     
     console.log(`✅ Successfully registered ${data.length} commands!`);
-    console.log(`📋 Active commands: ${data.map(c => c.name).join(', ')}`);
+    console.log(`📋 Registered commands: ${data.map(c => c.name).join(', ')}`);
     
   } catch (err) {
-    console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
-    console.error('Error:', err.message);
-    if (err.code) console.error('Code:', err.code);
-    if (err.status) console.error('Status:', err.status);
+    console.error('\n🚨🚨🚨 COMMAND REGISTRATION FAILED 🚨🚨🚨');
+    console.error('Error name:', err.name);
+    console.error('Error message:', err.message);
+    console.error('Error code:', err.code);
+    console.error('Error status:', err.status);
+    console.error('Full error:', err);
+    
+    if (err.rawError) {
+      console.error('Raw error details:', JSON.stringify(err.rawError, null, 2));
+    }
+    
+    // Log environment variables (safely)
+    console.error('\n🔍 Environment Check:');
+    console.error('CLIENT_ID exists:', !!process.env.CLIENT_ID);
+    console.error('GUILD_ID exists:', !!process.env.GUILD_ID);
+    console.error('TOKEN exists:', !!process.env.TOKEN);
+    console.error('CLIENT_ID value:', process.env.CLIENT_ID);
+    console.error('GUILD_ID value:', process.env.GUILD_ID);
   }
 }
 
@@ -107,7 +118,13 @@ const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
 app.listen(3000, () => console.log('Web server running on port 3000'));
 
-// Register commands, then login
-registerCommands().then(() => {
-  client.login(token);
-});
+// Register commands THEN login
+registerCommands()
+  .then(() => {
+    console.log('✅ Command registration complete, logging in...');
+    return client.login(token);
+  })
+  .catch(err => {
+    console.error('❌ Fatal error during startup:', err);
+    process.exit(1);
+  });
