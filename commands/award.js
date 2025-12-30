@@ -32,7 +32,7 @@ module.exports = {
       .setTitle('Apex Police Department Awards')
       .setDescription(`**Award:** ${awardType}\n\n**Awarded to:** ${targetUser}\n\n<:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656><:line:1413368368848830656>\n\nCongratulations on your award you earned! We are proud and pleased with your work and dedication to the department. We hope to see much more in the future!🎖️`)
       .setColor('#0C588A')
-      .setImage('https://media.discordapp.net/attachments/1413339969174503446/1428979456512626788/IMG_1627.png?ex=690a3913&is=6908e793&hm=e46b5dec3ed3e7b307983f552dc42c4188619090d08449ee280d08d159eb4891&=&format=webp&quality=lossless')
+      .setImage('https://media.discordapp.net/attachments/1291255470291423272/1300247855860154459/medal_png_2.png?ex=695467ae&is=6953162e&hm=2847aa7511d485a3de33a6a7b3aa39d124817192c4cac3336854e5d49bfc419a&=&format=webp&quality=lossless')
       .setThumbnail('https://media.discordapp.net/attachments/1435105704422936687/1435105729345228873/medal_png_2.png?ex=690ac1dc&is=6909705c&hm=c231e41a3f02c95bb2cda254bbd106479f87f26f22794f7d59a9e8721e2d9952&=&format=webp&quality=lossless')
       .setFooter({ text: `Issued by: ${interaction.user.tag}` })
       .setTimestamp();
