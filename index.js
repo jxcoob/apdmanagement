@@ -1,16 +1,33 @@
 require('dotenv').config();
-const { Client, GatewayIntentBits, REST, Routes } = require('discord.js');
+const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
 const keep_alive = require('./keep_alive.js');
 
-// ====== CONFIG ======
 const token = process.env.TOKEN;
-const clientId = process.env.CLIENT_ID;
-const guildId = process.env.GUILD_ID;
 
-// ====== CLIENT SETUP ======
+// Add startup logging
+console.log('🚀 Starting bot...');
+console.log('📁 Loading commands and events...');
+
+// Verify environment variables
+if (!token) {
+  console.error('❌ ERROR: TOKEN is missing from environment variables!');
+  process.exit(1);
+}
+if (!process.env.CLIENT_ID) {
+  console.error('❌ ERROR: CLIENT_ID is missing from environment variables!');
+  process.exit(1);
+}
+if (!process.env.GUILD_ID) {
+  console.error('❌ ERROR: GUILD_ID is missing from environment variables!');
+  process.exit(1);
+}
+
+console.log('✅ Environment variables loaded');
+
+// Create client
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -20,192 +37,122 @@ const client = new Client({
   ]
 });
 
-// ====== LOAD COMMANDS ======
-client.commands = new Map();
-client.prefixCommands = new Map(); // For prefix commands if needed
-const commands = [];
-const commandNames = new Set();
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+// Initialize command collections
+client.commands = new Collection();
+client.prefixCommands = new Collection();
 
-console.log(`📦 Loading ${commandFiles.length} command files...`);
+// Load slash commands
+const commandsPath = path.join(__dirname, 'commands');
+
+// Check if commands directory exists
+if (!fs.existsSync(commandsPath)) {
+  console.error('❌ ERROR: commands/ directory not found!');
+  console.error('Please create the commands/ directory and add command files.');
+  process.exit(1);
+}
+
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+console.log(`📝 Found ${commandFiles.length} command files`);
 
 for (const file of commandFiles) {
   try {
     const filePath = path.join(commandsPath, file);
     const command = require(filePath);
-    
-    // Handle commands that export an array of SlashCommandBuilders
-    if (Array.isArray(command.data)) {
-      for (const cmdData of command.data) {
-        client.commands.set(cmdData.name, command);
-        const jsonCmd = cmdData.toJSON ? cmdData.toJSON() : cmdData;
-        if (!commandNames.has(jsonCmd.name)) {
-          commands.push(jsonCmd);
-          commandNames.add(jsonCmd.name);
-        }
-      }
-    } else if (command.data) {
+    if ('data' in command && 'execute' in command) {
       client.commands.set(command.data.name, command);
-      const jsonCmd = command.data.toJSON ? command.data.toJSON() : command.data;
-      if (!commandNames.has(jsonCmd.name)) {
-        commands.push(jsonCmd);
-        commandNames.add(jsonCmd.name);
-      }
+      console.log(`  ✅ Loaded: ${command.data.name}`);
+    } else {
+      console.log(`  ⚠️  Skipped ${file}: missing data or execute`);
     }
   } catch (error) {
-    console.error(`❌ Error loading ${file}:`, error.message);
+    console.error(`  ❌ Error loading ${file}:`, error.message);
   }
 }
 
-console.log(`✅ Loaded ${commands.length} unique commands`);
-console.log(`📝 Commands: ${Array.from(commandNames).sort().join(', ')}`);
-
-// ====== LOAD EVENT HANDLERS ======
-const eventsPath = path.join(__dirname, 'events');
-if (fs.existsSync(eventsPath)) {
-  const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
-
-  console.log(`📦 Loading ${eventFiles.length} event files...`);
-
-  for (const file of eventFiles) {
+// Load prefix commands
+const prefixCommandsPath = path.join(__dirname, 'prefixCommands');
+if (fs.existsSync(prefixCommandsPath)) {
+  const prefixCommandFiles = fs.readdirSync(prefixCommandsPath).filter(file => file.endsWith('.js'));
+  console.log(`📝 Found ${prefixCommandFiles.length} prefix command files`);
+  
+  for (const file of prefixCommandFiles) {
     try {
-      const filePath = path.join(eventsPath, file);
-      const event = require(filePath);
-      
-      if (event.once) {
-        client.once(event.name, (...args) => event.execute(...args, client));
-      } else {
-        client.on(event.name, (...args) => event.execute(...args, client));
+      const filePath = path.join(prefixCommandsPath, file);
+      const command = require(filePath);
+      if ('name' in command && 'execute' in command) {
+        client.prefixCommands.set(command.name, command);
+        console.log(`  ✅ Loaded: ${command.name}`);
       }
-      
-      console.log(`  ✓ Loaded event: ${event.name}`);
     } catch (error) {
-      console.error(`❌ Error loading event ${file}:`, error.message);
+      console.error(`  ❌ Error loading ${file}:`, error.message);
     }
   }
-
-  console.log(`✅ Loaded ${eventFiles.length} events`);
 } else {
-  console.log('📁 No events folder found, skipping event loading');
+  console.log('⚠️  prefixCommands/ directory not found, skipping...');
 }
 
-// ====== READY EVENT & COMMAND REGISTRATION ======
-client.once('ready', async () => {
-  console.log('\n🎯 ========== READY EVENT FIRED ==========');
-  console.log(`✅ Logged in as ${client.user.tag}`);
-  console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
-  console.log(`🆔 Client ID: ${clientId}`);
-  console.log(`🏠 Guild ID: ${guildId}`);
-  
-  const rest = new REST({ version: '10' }).setToken(token);
-  
-  try {
-    console.log('\n🧹 Clearing all existing commands...');
-    
-    // Clear guild commands
-    await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
-    console.log('  ✓ Guild commands cleared');
-    
-    // Clear global commands
-    await rest.put(Routes.applicationCommands(clientId), { body: [] });
-    console.log('  ✓ Global commands cleared');
-    
-    console.log('\n⏳ Waiting 2 seconds for Discord to process...');
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    // Check for duplicate command names
-    const commandNamesArray = commands.map(c => c.name);
-    const uniqueNames = new Set(commandNamesArray);
-    
-    if (commandNamesArray.length !== uniqueNames.size) {
-      console.error('❌ Error: Duplicate command names detected!');
-      const duplicates = commandNamesArray.filter((name, index) => commandNamesArray.indexOf(name) !== index);
-      console.error('Duplicates:', duplicates);
-      return;
-    }
-    
-    console.log(`\n🔄 Registering ${commands.length} commands with Discord...`);
-    console.log(`📋 Command list: ${commandNamesArray.join(', ')}`);
-    
-    const data = await rest.put(
-      Routes.applicationGuildCommands(clientId, guildId), 
-      { body: commands }
-    );
-    
-    console.log(`\n✅ Successfully registered ${data.length} commands!`);
-    console.log(`📋 Active commands: ${data.map(c => c.name).join(', ')}`);
-    console.log('\n🎉 ========== BOT READY TO USE ==========');
-    console.log('💡 Type / in your Discord server to see all commands!\n');
-    
-  } catch (err) {
-    console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
-    console.error('Error name:', err.name);
-    console.error('Error message:', err.message);
-    if (err.code) console.error('Error code:', err.code);
-    if (err.status) console.error('Error status:', err.status);
-    
-    if (err.rawError) {
-      console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
-    }
-    
-    console.error('\n🔧 TROUBLESHOOTING:');
-    console.error('1. Verify CLIENT_ID:', clientId);
-    console.error('2. Verify GUILD_ID:', guildId);
-    console.error('3. Check bot is in the server');
-    console.error(`4. Re-invite bot: https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands`);
-  }
-});
+// Load event handlers
+const eventsPath = path.join(__dirname, 'events');
 
-// ====== EXPRESS SERVER ======
+// Check if events directory exists
+if (!fs.existsSync(eventsPath)) {
+  console.error('❌ ERROR: events/ directory not found!');
+  console.error('Please create the events/ directory and add event files.');
+  process.exit(1);
+}
+
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+console.log(`📝 Found ${eventFiles.length} event files`);
+
+for (const file of eventFiles) {
+  try {
+    const filePath = path.join(eventsPath, file);
+    const event = require(filePath);
+    if (event.once) {
+      client.once(event.name, (...args) => event.execute(...args, client));
+      console.log(`  ✅ Loaded: ${event.name} (once)`);
+    } else {
+      client.on(event.name, (...args) => event.execute(...args, client));
+      console.log(`  ✅ Loaded: ${event.name}`);
+    }
+  } catch (error) {
+    console.error(`  ❌ Error loading ${file}:`, error.message);
+  }
+}
+
+// Express server for keep-alive
 const app = express();
 app.get('/', (req, res) => res.send('Bot is alive!'));
-app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
+app.listen(3000, () => console.log('Web server running on port 3000'));
 
-// ====== ERROR HANDLERS ======
-client.on('error', error => {
-  console.error('❌ Client error:', error);
+// Add global error handlers
+process.on('unhandledRejection', (error) => {
+  console.error('❌ Unhandled promise rejection:', error);
 });
 
-client.on('warn', info => {
-  console.warn('⚠️ Client warning:', info);
+process.on('uncaughtException', (error) => {
+  console.error('❌ Uncaught exception:', error);
+  process.exit(1);
 });
 
-client.on('debug', info => {
+// Add Discord client error handler
+client.on('error', (error) => {
+  console.error('❌ Discord client error:', error);
+});
+
+client.on('warn', (warning) => {
+  console.warn('⚠️  Discord client warning:', warning);
+});
+
+client.on('debug', (info) => {
   // Uncomment for verbose debugging
-  // console.log('🔍 Debug:', info);
+  // console.log('🐛 Debug:', info);
 });
 
-// ====== LOGIN ======
-console.log('🔐 Logging in to Discord...');
-console.log('🔑 Token exists:', !!token);
-console.log('🔑 Token length:', token ? token.length : 0);
-console.log('🔑 Token starts with:', token ? token.substring(0, 20) + '...' : 'NO TOKEN');
-
-// Set a timeout to check if ready event fires
-const readyTimeout = setTimeout(() => {
-  console.error('\n⏰ TIMEOUT: Ready event did not fire after 30 seconds');
-  console.error('This usually means:');
-  console.error('1. Invalid TOKEN in environment variables');
-  console.error('2. Bot token was regenerated in Discord Developer Portal');
-  console.error('3. Network/firewall issues on Render');
-  console.error('4. Discord API is down');
-  console.error('\nBot will keep trying to connect...');
-}, 30000);
-
-client.login(token)
-  .then(() => {
-    console.log('✅ Login function completed, waiting for ready event...');
-  })
-  .catch(err => {
-    clearTimeout(readyTimeout);
-    console.error('❌ Failed to login:', err);
-    console.error('❌ Error details:', err.message);
-    console.error('❌ Check your TOKEN in Render environment variables');
-    process.exit(1);
-  });
-
-// Clear timeout when ready fires
-client.once('ready', () => {
-  clearTimeout(readyTimeout);
+// Login
+console.log('🔐 Attempting to login...');
+client.login(token).catch(error => {
+  console.error('❌ Failed to login:', error.message);
+  console.error('Full error:', error);
+  process.exit(1);
 });
