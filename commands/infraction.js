@@ -25,7 +25,7 @@ module.exports = {
           .addChoices(
             { name: 'Patrol', value: 'Patrol' },
             { name: 'SWAT', value: 'SWAT' },
-            { name: 'CID', value: 'FDB' },
+            { name: 'CID', value: 'CID' },
             { name: 'Training', value: 'Training' }
           )
         )
