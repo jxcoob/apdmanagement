@@ -89,6 +89,7 @@ if (fs.existsSync(eventsPath)) {
 
 // ====== READY EVENT & COMMAND REGISTRATION ======
 client.once('ready', async () => {
+  console.log('🎯 READY EVENT FIRED!');
   console.log(`✅ Logged in as ${client.user.tag}`);
   console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
   
@@ -99,9 +100,11 @@ client.once('ready', async () => {
     
     // Clear guild commands
     await rest.put(Routes.applicationGuildCommands(clientId, guildId), { body: [] });
+    console.log('✓ Guild commands cleared');
     
     // Clear global commands
     await rest.put(Routes.applicationCommands(clientId), { body: [] });
+    console.log('✓ Global commands cleared');
     
     console.log('⏳ Waiting 2 seconds for Discord to process...');
     await new Promise(resolve => setTimeout(resolve, 2000));
@@ -118,6 +121,7 @@ client.once('ready', async () => {
     }
     
     console.log(`🔄 Registering ${commands.length} commands with Discord...`);
+    console.log(`📋 Command names: ${commandNamesArray.join(', ')}`);
     
     const data = await rest.put(
       Routes.applicationGuildCommands(clientId, guildId), 
@@ -146,6 +150,41 @@ client.once('ready', async () => {
     console.error('3. Check bot is in the server');
     console.error(`4. Re-invite bot: https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot%20applications.commands`);
   }
+});
+
+// Add a backup listener to see if ready fires at all
+client.on('ready', () => {
+  console.log('⚠️ Secondary ready listener fired (this should not happen if once() worked)');
+});
+
+// ====== PREFIX COMMANDS ======
+client.on('messageCreate', async message => {
+  if (message.author.bot || !message.guild) return;
+
+  if (message.content.startsWith('$say')) {
+    const allowedSayRoles = ['1405655436585205846', '1405655436597661720'];
+    if (!message.member.roles.cache.some(r => allowedSayRoles.includes(r.id))) {
+      return message.reply('You do not have permission.');
+    }
+
+    const text = message.content.slice(4).trim();
+    if (!text) return message.reply('Please provide text.');
+
+    await message.delete().catch(console.error);
+    await message.channel.send(text);
+  }
+});
+
+// ====== EXPRESS SERVER ======
+const app = express();
+app.get('/', (req, res) => res.send('Bot is alive!'));
+app.listen(3000, () => console.log('🌐 Web server running on port 3000'));
+
+// ====== LOGIN ======
+console.log('🔐 Logging in to Discord...');
+client.login(token).catch(err => {
+  console.error('❌ Failed to login:', err);
+  process.exit(1);
 });
 
 // ====== PREFIX COMMANDS ======
