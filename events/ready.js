@@ -49,41 +49,19 @@ module.exports = {
     const rest = new REST({ version: '10' }).setToken(process.env.TOKEN);
     
     try {
-      console.log('🧹 Clearing all existing commands...');
+      console.log('🔄 Registering/updating commands with Discord...');
       
-      await rest.put(
-        Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
-        { body: [] }
-      );
-      console.log('✅ Guild commands cleared');
-      
-      await rest.put(
-        Routes.applicationCommands(process.env.CLIENT_ID),
-        { body: [] }
-      );
-      console.log('✅ Global commands cleared');
-      
-      console.log('⏳ Waiting 10 seconds for Discord to fully process...');
-      await new Promise(resolve => setTimeout(resolve, 10000));
-      
-      console.log('🔄 Registering commands with Discord...');
-      
-      // Add timeout to prevent hanging
-      const registrationPromise = rest.put(
+      // Just PUT commands directly - Discord will handle updates automatically
+      // No need to clear first!
+      const data = await rest.put(
         Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID),
         { body: commands }
       );
       
-      const timeoutPromise = new Promise((_, reject) => 
-        setTimeout(() => reject(new Error('Registration timeout after 30 seconds')), 30000)
-      );
-      
-      const data = await Promise.race([registrationPromise, timeoutPromise]);
-      
       console.log(`✅ Successfully registered ${data.length} commands!`);
-      console.log(`📋 Registered commands: ${data.map(c => c.name).join(', ')}`);
+      console.log(`📋 Active commands: ${data.map(c => c.name).join(', ')}`);
       console.log('🎉 Bot is ready to use!');
-      console.log(`\n💡 Try typing / in your Discord server to see commands!`);
+      console.log(`\n💡 Type / in your Discord server to see all commands!`);
       
     } catch (err) {
       console.error('\n❌❌❌ ERROR REGISTERING COMMANDS ❌❌❌');
@@ -96,14 +74,16 @@ module.exports = {
         console.error('Raw error:', JSON.stringify(err.rawError, null, 2));
       }
       
-      if (err.stack) {
-        console.error('Stack trace:', err.stack);
+      if (err.requestBody) {
+        console.error('Request body:', JSON.stringify(err.requestBody, null, 2));
       }
       
       console.error('\n🔧 POSSIBLE FIXES:');
-      console.error('1. Check CLIENT_ID and GUILD_ID in Render environment variables');
-      console.error('2. Re-invite bot: https://discord.com/api/oauth2/authorize?client_id=' + process.env.CLIENT_ID + '&permissions=8&scope=bot%20applications.commands');
-      console.error('3. Make sure bot has "applications.commands" scope');
+      console.error('1. Verify CLIENT_ID in Render: ' + process.env.CLIENT_ID);
+      console.error('2. Verify GUILD_ID in Render: ' + process.env.GUILD_ID);
+      console.error('3. Re-invite bot with this URL:');
+      console.error(`   https://discord.com/api/oauth2/authorize?client_id=${process.env.CLIENT_ID}&permissions=8&scope=bot%20applications.commands`);
+      console.error('4. Make sure bot is actually IN the server with GUILD_ID: ' + process.env.GUILD_ID);
     }
   }
 };
