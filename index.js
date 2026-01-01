@@ -3,7 +3,6 @@ const { Client, GatewayIntentBits, Collection } = require('discord.js');
 const fs = require('fs');
 const path = require('path');
 const express = require('express');
-const keep_alive = require('./keep_alive.js');
 
 const token = process.env.TOKEN;
 
@@ -156,3 +155,4 @@ client.login(token).catch(error => {
   console.error('Full error:', error);
   process.exit(1);
 });
+
